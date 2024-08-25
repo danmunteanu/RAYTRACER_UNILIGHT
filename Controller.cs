@@ -19,9 +19,9 @@ namespace UnilightRaytracer
             public float height = 0;
         }
 
-        private Scene scene = null;
-        private Raytracer rt = null;
-        private RaytracerThread rtThread = null;
+        private Scene mScene = null;
+        private Raytracer mRaytracer = null;
+        private RaytracerThread mRenderThread = null;
 
         //private EditorCreator editorCreator = new EditorCreator ();
 
@@ -31,27 +31,27 @@ namespace UnilightRaytracer
 
         public void setScene(Scene s)
         {
-            this.scene = s;
+            this.mScene = s;
         }
 
         public void setRaytracer(Raytracer r)
         {
-            this.rt = r;
+            this.mRaytracer = r;
         }
 
         public void handleNewScene()
         {
-            scene.clearLights();
-            scene.clearObjects();
-            scene.setAmbientColor(Color.black);
+            mScene.clearLights();
+            mScene.clearObjects();
+            mScene.setAmbientColor(Color.black);
         }
 
         public void handleCloseScene()
         {
-            scene.clearLights();
-            scene.clearObjects();
-            scene.setAmbientColor(Color.black);
-            scene.setAmbientColor(Color.black);
+            mScene.clearLights();
+            mScene.clearObjects();
+            mScene.setAmbientColor(Color.black);
+            mScene.setAmbientColor(Color.black);
         }
 
         /*    
@@ -82,101 +82,57 @@ namespace UnilightRaytracer
 
         public void handleRender()
         {
-            if (!rtThread.MustRender)
+            if (!mRenderThread.MustRender)
             {
-                rtThread.MustRender = true;
+                mRenderThread.MustRender = true;
             }
         }
 
         public void handleStopRender()
         {
-            if (!rt.isStopRender())
+            if (!mRaytracer.isStopRender())
             {
-                rt.setStopRender(true);
+                mRaytracer.setStopRender(true);
             }
         }
 
         public List<PointLight> handleFillLights()
         {
-            if (scene == null)
+            if (mScene == null)
             {
                 return null;
             }
-            List<PointLight> lights = scene.getLights();
+            List<PointLight> lights = mScene.getLights();
             return lights;
         }
 
         public void handleAddLight()
         {
-            scene.addLight(new PointLight());
+            mScene.addLight(new PointLight());
         }
 
         public void handleRemoveLight(int index)
         {
-            scene.removeLight(index);
+            mScene.removeLight(index);
         }
 
         public void handleRemoveObject(int index)
         {
-            scene.removeObject(index);
+            mScene.removeObject(index);
         }
 
         public List<Geobject> handleFillObjects()
         {
-            if (scene == null)
+            if (mScene == null)
             {
                 return null;
             }
-            List<Geobject> objects = scene.getObjects();
+            List<Geobject> objects = mScene.getObjects();
             return objects;
         }
 
-        public SettingsInfo handleFillSettings()
-        {
-            SettingsInfo info = new SettingsInfo();
-            info.globalReflection = rt.GlobalReflection;
-            info.computeSpecular = rt.ComputeSpecular;
-            info.computeDiffuse = rt.ComputeDiffuse;
-            info.computeAmbient = rt.ComputeAmbient;
-            info.computeFog = rt.ComputeFog;
-            info.depth = rt.getMaxTraceDepth();
 
-            Camera cam = rt.getCamera();
-            info.eye = cam.getEye();
-            info.lookAt = cam.getLookAt();
-            info.width = cam.getViewportWidth();
-            info.height = cam.getViewportHeight();
-            return info;
-        }
 
-        public void updateSettings(SettingsInfo info)
-        {
-            if (!rtThread.MustRender)
-            {
-                rt.setMaxTraceDepth(info.depth);
-                rt.ComputeAmbient = info.globalReflection;
-                rt.ComputeAmbient = info.computeSpecular;
-                rt.ComputeAmbient = info.computeDiffuse;
-                rt.ComputeAmbient = info.computeAmbient;
-                rt.ComputeAmbient = info.computeFog;
-
-                Camera cam = rt.getCamera();
-                cam.setEye(info.eye);
-                cam.setLookAt(info.lookAt);
-                cam.setViewportWidth(info.width);
-                cam.setViewportHeight(info.height);
-            }
-        }
-
-        public RaytracerThread getRaytracerThread()
-        {
-            return rtThread;
-        }
-
-        public void setRaytracerThread(RaytracerThread rtThread)
-        {
-            this.rtThread = rtThread;
-        }
     }
 
 }

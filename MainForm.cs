@@ -20,13 +20,25 @@ namespace UnilightRaytracer
             public float height = 0;
         }
 
+        private static void Render()
+        {
+            while (true)
+            {
+                Console.WriteLine("Running");
+            }
+        }
+
         private Scene mScene = null;
         private Raytracer mRaytracer = null;
         private RaytracerThread mRenderThread = null;
 
+        private Thread mRender = new Thread(new ThreadStart(Render));
+
         public MainForm()
         {
             InitializeComponent();
+
+            mRender.Start();
 
             Scene scene = new Scene();
             //  Storage storage = new SerializationStorage();

@@ -37,32 +37,38 @@
             // 
             // panelRender
             // 
-            panelRender.Location = new Point(127, 12);
+            panelRender.BorderStyle = BorderStyle.FixedSingle;
+            panelRender.Location = new Point(13, 69);
+            panelRender.Margin = new Padding(4, 5, 4, 5);
             panelRender.Name = "panelRender";
-            panelRender.Size = new Size(641, 383);
+            panelRender.Size = new Size(957, 583);
             panelRender.TabIndex = 0;
             // 
             // progressRender
             // 
-            progressRender.Location = new Point(127, 401);
+            progressRender.Location = new Point(13, 662);
+            progressRender.Margin = new Padding(4, 5, 4, 5);
             progressRender.Name = "progressRender";
-            progressRender.Size = new Size(540, 23);
+            progressRender.Size = new Size(771, 38);
             progressRender.TabIndex = 1;
             // 
             // button1
             // 
-            button1.Location = new Point(673, 401);
+            button1.Location = new Point(793, 662);
+            button1.Margin = new Padding(4, 5, 4, 5);
             button1.Name = "button1";
-            button1.Size = new Size(95, 23);
+            button1.Size = new Size(177, 38);
             button1.TabIndex = 2;
             button1.Text = "RENDER";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // btnNewScene
             // 
-            btnNewScene.Location = new Point(12, 12);
+            btnNewScene.Location = new Point(13, 14);
+            btnNewScene.Margin = new Padding(4, 5, 4, 5);
             btnNewScene.Name = "btnNewScene";
-            btnNewScene.Size = new Size(109, 27);
+            btnNewScene.Size = new Size(117, 45);
             btnNewScene.TabIndex = 3;
             btnNewScene.Text = "NEW";
             btnNewScene.UseVisualStyleBackColor = true;
@@ -70,9 +76,10 @@
             // 
             // btnCloseScene
             // 
-            btnCloseScene.Location = new Point(12, 45);
+            btnCloseScene.Location = new Point(138, 14);
+            btnCloseScene.Margin = new Padding(4, 5, 4, 5);
             btnCloseScene.Name = "btnCloseScene";
-            btnCloseScene.Size = new Size(109, 27);
+            btnCloseScene.Size = new Size(117, 45);
             btnCloseScene.TabIndex = 4;
             btnCloseScene.Text = "CLOSE";
             btnCloseScene.UseVisualStyleBackColor = true;
@@ -80,14 +87,15 @@
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(827, 483);
+            ClientSize = new Size(983, 718);
             Controls.Add(btnCloseScene);
             Controls.Add(btnNewScene);
             Controls.Add(button1);
             Controls.Add(progressRender);
             Controls.Add(panelRender);
+            Margin = new Padding(4, 5, 4, 5);
             Name = "MainForm";
             Text = "Form1";
             Load += MainForm_Load;

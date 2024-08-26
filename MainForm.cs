@@ -20,34 +20,33 @@ namespace UnilightRaytracer
             public float height = 0;
         }
 
-        private static void Render()
+        public async Task Render()
         {
-            while (true)
+            await Task.Run(() =>
             {
-                Console.WriteLine("Running");
-            }
+                mRaytracer.render();
+            });
         }
 
-        private Scene mScene = null;
-        private Raytracer mRaytracer = null;
-        private RaytracerThread mRenderThread = null;
+        private Scene mScene = new Scene();
+        private Raytracer mRaytracer = new Raytracer();
 
-        private Thread mRender = new Thread(new ThreadStart(Render));
+        public void UpdateProgress(int percent)
+        {
+            //  progressRender.Value = percent;
+        }
 
         public MainForm()
         {
             InitializeComponent();
 
-            mRender.Start();
-
             Scene scene = new Scene();
             //  Storage storage = new SerializationStorage();
             Controller control = new Controller();
             ObservableImage image = new ObservableImage(800, 600, 0/*java.awt.image.BufferedImage.TYPE_INT_RGB*/);
-            //            RenderFrame mainFrame = null;
-            Raytracer rt = new Raytracer();
-            RaytracerThread rtThread = new RaytracerThread(rt);
-
+            
+            mRaytracer.setImage( image );
+            
             //  setup camera
             Camera cam = new Camera();
             cam.setEye(new Vector(0, 15, 35));
@@ -57,16 +56,18 @@ namespace UnilightRaytracer
 
             //  setup main frame
             /*          javax.swing.JFrame.setDefaultLookAndFeelDecorated(true);
+            //            RenderFrame mainFrame = null;
                       mainFrame = new RenderFrame(image);
                       utils.Common.centerFrame(mainFrame);
                       mainFrame.setController(control);
                       mainFrame.setVisible(true);*/
 
             //  setup raytracer
-            rt.setScene(scene);
-            rt.setCamera(cam);
-            rt.setImage(image);
-            rt.setMaxTraceDepth(5);
+            mRaytracer.setScene(scene);
+            mRaytracer.setCamera(cam);
+            mRaytracer.setImage(image);
+            mRaytracer.setMaxTraceDepth(5);
+            mRaytracer.Callback = UpdateProgress;
             //rt.setCallback(mainFrame.createOrGetProgressCallback());
 
             //  setup raytracer thread
@@ -143,29 +144,29 @@ namespace UnilightRaytracer
 
         public void UpdateSettings(SettingsInfo info)
         {
-            if (!mRenderThread.MustRender)
-            {
-                mRaytracer.setMaxTraceDepth(info.depth);
-                mRaytracer.ComputeAmbient = info.globalReflection;
-                mRaytracer.ComputeAmbient = info.computeSpecular;
-                mRaytracer.ComputeAmbient = info.computeDiffuse;
-                mRaytracer.ComputeAmbient = info.computeAmbient;
-                mRaytracer.ComputeAmbient = info.computeFog;
+            //if (!mRenderThread.MustRender)
+            //{
+            //    mRaytracer.setMaxTraceDepth(info.depth);
+            //    mRaytracer.ComputeAmbient = info.globalReflection;
+            //    mRaytracer.ComputeAmbient = info.computeSpecular;
+            //    mRaytracer.ComputeAmbient = info.computeDiffuse;
+            //    mRaytracer.ComputeAmbient = info.computeAmbient;
+            //    mRaytracer.ComputeAmbient = info.computeFog;
 
-                Camera cam = mRaytracer.getCamera();
-                cam.setEye(info.eye);
-                cam.setLookAt(info.lookAt);
-                cam.setViewportWidth(info.width);
-                cam.setViewportHeight(info.height);
-            }
+            //    Camera cam = mRaytracer.getCamera();
+            //    cam.setEye(info.eye);
+            //    cam.setLookAt(info.lookAt);
+            //    cam.setViewportWidth(info.width);
+            //    cam.setViewportHeight(info.height);
+            //}
         }
 
         public void handleRender()
         {
-            if (!mRenderThread.MustRender)
-            {
-                mRenderThread.MustRender = true;
-            }
+            //if (!mRenderThread.MustRender)
+            //{
+            //    mRenderThread.MustRender = true;
+            //}
         }
 
         public void handleStopRender()
@@ -174,6 +175,11 @@ namespace UnilightRaytracer
             {
                 mRaytracer.setStopRender(true);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Render();
         }
     }
 }

@@ -28,21 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            panelRender = new Panel();
             progressRender = new ProgressBar();
             button1 = new Button();
             btnNewScene = new Button();
             btnCloseScene = new Button();
+            pictureRender = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)pictureRender).BeginInit();
             SuspendLayout();
-            // 
-            // panelRender
-            // 
-            panelRender.BorderStyle = BorderStyle.FixedSingle;
-            panelRender.Location = new Point(13, 69);
-            panelRender.Margin = new Padding(4, 5, 4, 5);
-            panelRender.Name = "panelRender";
-            panelRender.Size = new Size(957, 583);
-            panelRender.TabIndex = 0;
             // 
             // progressRender
             // 
@@ -85,29 +77,37 @@
             btnCloseScene.UseVisualStyleBackColor = true;
             btnCloseScene.Click += btnCloseScene_Click;
             // 
+            // pictureRender
+            // 
+            pictureRender.Location = new Point(13, 67);
+            pictureRender.Name = "pictureRender";
+            pictureRender.Size = new Size(957, 587);
+            pictureRender.TabIndex = 5;
+            pictureRender.TabStop = false;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(983, 718);
+            Controls.Add(pictureRender);
             Controls.Add(btnCloseScene);
             Controls.Add(btnNewScene);
             Controls.Add(button1);
             Controls.Add(progressRender);
-            Controls.Add(panelRender);
             Margin = new Padding(4, 5, 4, 5);
             Name = "MainForm";
             Text = "Form1";
             Load += MainForm_Load;
+            ((System.ComponentModel.ISupportInitialize)pictureRender).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
-
-        private Panel panelRender;
         private ProgressBar progressRender;
         private Button button1;
         private Button btnNewScene;
         private Button btnCloseScene;
+        private PictureBox pictureRender;
     }
 }

@@ -23,9 +23,11 @@ namespace UnilightRaytracer
         {
             await Task.Run(() =>
             {
-
-
                 mRaytracer.Render();
+
+                mImage.Clear(Color.blue);
+                pictureRender.Image = mImage.GetBitmap();
+                
             });
         }
 
@@ -43,21 +45,21 @@ namespace UnilightRaytracer
             progressRender.Invoke(m);
         }
 
+        private ObservableImageWrapper mImage = new ObservableImageWrapper(800, 600);
+
         public MainForm()
         {
             InitializeComponent();
 
             //  Trigger Double Buffering
-            typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty
+            /*typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty
             | BindingFlags.Instance | BindingFlags.NonPublic, null,
-            panelRender, new object[] { true });
+            panelRender, new object[] { true });*/
 
             Scene scene = new Scene();
             //  Storage storage = new SerializationStorage();
-            Controller control = new Controller();
-            ObservableImage image = new ObservableImage(800, 600, 0/*java.awt.image.BufferedImage.TYPE_INT_RGB*/);
             
-            mRaytracer.setImage (image);
+            mRaytracer.setImage (mImage);
             
             //  setup camera
             Camera cam = new Camera();
@@ -78,7 +80,7 @@ namespace UnilightRaytracer
             mRaytracer.Scene = scene;
             mRaytracer.Callback = UpdateRenderProgress;
             mRaytracer.setCamera(cam);
-            mRaytracer.setImage(image);
+            mRaytracer.setImage(mImage);
             mRaytracer.setMaxTraceDepth(5);
 
             //  add mainFrame as an observer for the image

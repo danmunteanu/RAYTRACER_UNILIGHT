@@ -20,7 +20,7 @@ public class RaytracerThread /*extends Thread*/
             try { /*Thread.sleep(0);*/ } catch (Exception ex) {}
 
             if (MustRender) { 
-                raytracer.render();
+                raytracer.Render();
                 MustRender = false;
             }
         }

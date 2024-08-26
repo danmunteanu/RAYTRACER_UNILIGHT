@@ -1,6 +1,5 @@
 using LibUnilight;
-using System.ComponentModel.Design.Serialization;
-using System.Runtime.Intrinsics.X86;
+using System.Reflection;
 
 namespace UnilightRaytracer
 {
@@ -24,28 +23,41 @@ namespace UnilightRaytracer
         {
             await Task.Run(() =>
             {
-                mRaytracer.render();
+
+
+                mRaytracer.Render();
             });
         }
 
         private Scene mScene = new Scene();
         private Raytracer mRaytracer = new Raytracer();
 
-        public void UpdateProgress(int percent)
+        public void UpdateRenderProgress(int percent)
         {
             //  progressRender.Value = percent;
+
+            System.Windows.Forms.MethodInvoker m = null; 
+            m = new System.Windows.Forms.MethodInvoker(
+                () => progressRender.Value = percent
+            );
+            progressRender.Invoke(m);
         }
 
         public MainForm()
         {
             InitializeComponent();
 
+            //  Trigger Double Buffering
+            typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty
+            | BindingFlags.Instance | BindingFlags.NonPublic, null,
+            panelRender, new object[] { true });
+
             Scene scene = new Scene();
             //  Storage storage = new SerializationStorage();
             Controller control = new Controller();
             ObservableImage image = new ObservableImage(800, 600, 0/*java.awt.image.BufferedImage.TYPE_INT_RGB*/);
             
-            mRaytracer.setImage( image );
+            mRaytracer.setImage (image);
             
             //  setup camera
             Camera cam = new Camera();
@@ -63,16 +75,11 @@ namespace UnilightRaytracer
                       mainFrame.setVisible(true);*/
 
             //  setup raytracer
-            mRaytracer.setScene(scene);
+            mRaytracer.Scene = scene;
+            mRaytracer.Callback = UpdateRenderProgress;
             mRaytracer.setCamera(cam);
             mRaytracer.setImage(image);
             mRaytracer.setMaxTraceDepth(5);
-            mRaytracer.Callback = UpdateProgress;
-            //rt.setCallback(mainFrame.createOrGetProgressCallback());
-
-            //  setup raytracer thread
-            /*rtThread.setPriority(5);
-            rtThread.start();  // start rt thread*/
 
             //  add mainFrame as an observer for the image
             /*image.getSubject().addObserver(mainFrame);*/

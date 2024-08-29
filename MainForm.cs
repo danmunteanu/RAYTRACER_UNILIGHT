@@ -47,9 +47,28 @@ namespace UnilightRaytracer
 
         private ObservableImageWrapper mImage = new ObservableImageWrapper(800, 600);
 
+        private void BuildScene()
+        {
+            mScene = new Scene();
+
+            Sphere sph = null;
+            Material m = null;
+
+            m = new Material();
+            m.setColor(Color.blue);
+
+            sph = new Sphere();
+            sph.setOrigin(new Vector(-3.5f, 0, 0));
+            sph.setMaterial(m);
+
+            mScene.addObject(sph);
+        }
+
         public MainForm()
         {
             InitializeComponent();
+
+            BuildScene();
 
             //  Trigger Double Buffering
             /*typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty

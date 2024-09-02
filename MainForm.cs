@@ -23,9 +23,8 @@ namespace UnilightRaytracer
         {
             await Task.Run(() =>
             {
-                mRaytracer.Render();
-
-                mImage.Clear(Color.blue);
+                mImage.Clear(Color.black);
+                mRaytracer.Render();                
                 pictureRender.Image = mImage.GetBitmap();
                 
             });
@@ -45,23 +44,33 @@ namespace UnilightRaytracer
             progressRender.Invoke(m);
         }
 
-        private ObservableImageWrapper mImage = new ObservableImageWrapper(800, 600);
+        private ObservableImage mImage = new ObservableImage(800, 600);
 
         private void BuildScene()
         {
             mScene = new Scene();
 
-            Sphere sph = null;
+            Sphere sphere_1 = null;
             Material m = null;
 
-            m = new Material();
-            m.Color = Color.blue;
+            sphere_1 = new Sphere();
+            sphere_1.Origin = new Vector(-3.5f, 0, 0);
+            sphere_1.Material.Color = Color.blue;
+            sphere_1.Material.Gloss = 15;
+            sphere_1.Material.Specular = 0.9f;
+            sphere_1.Material.Reflection = 0.2f;
+            sphere_1.Radius = 2.5f;
+            sphere_1.Enabled = true;
 
-            sph = new Sphere();
-            sph.Origin = new Vector(-3.5f, 0, 0);
-            sph.Material = m;
+            mScene.addObject(sphere_1);
 
-            mScene.addObject(sph);
+            PointLight p = new PointLight();
+            p.setPosition(new Vector(0, 15, 35));
+            p.setColor(Color.white);
+            p.setName("Point Light");
+            p.setEnabled(true);
+
+            mScene.addLight(p);
         }
 
         public MainForm()
@@ -74,8 +83,6 @@ namespace UnilightRaytracer
             /*typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty
             | BindingFlags.Instance | BindingFlags.NonPublic, null,
             panelRender, new object[] { true });*/
-
-            Scene scene = new Scene();
             //  Storage storage = new SerializationStorage();
             
             mRaytracer.setImage (mImage);
@@ -96,10 +103,13 @@ namespace UnilightRaytracer
                       mainFrame.setVisible(true);*/
 
             //  setup raytracer
-            mRaytracer.Scene = scene;
+            mRaytracer.Scene = mScene;
             mRaytracer.Callback = UpdateRenderProgress;
             mRaytracer.setCamera(cam);
-            mRaytracer.setImage(mImage);
+            mRaytracer.setImage(mImage);            
+            mRaytracer.ComputeAmbient = true;
+            mRaytracer.ComputeSpecular = true;
+            mRaytracer.ComputeDiffuse = true;
             mRaytracer.setMaxTraceDepth(5);
 
             //  add mainFrame as an observer for the image

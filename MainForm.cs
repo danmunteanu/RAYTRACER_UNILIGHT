@@ -19,6 +19,9 @@ namespace UnilightRaytracer
             public float height = 0;
         }
 
+        private Scene mScene = new Scene();
+        private Raytracer mRaytracer = new Raytracer();
+
         public async Task Render()
         {
             await Task.Run(() =>
@@ -29,9 +32,6 @@ namespace UnilightRaytracer
                 
             });
         }
-
-        private Scene mScene = new Scene();
-        private Raytracer mRaytracer = new Raytracer();
 
         public void UpdateRenderProgress(int percent)
         {
@@ -85,10 +85,10 @@ namespace UnilightRaytracer
             
             //  setup camera
             Camera cam = new Camera();
-            cam.setEye(new Vector(0, 15, 35));
-            cam.setLookAt(new Vector(0, 0, 0));
-            cam.setViewportWidth(12);
-            cam.setViewportHeight(9);
+            cam.Eye = new Vector(0, 15, 35);
+            cam.LookAt = new Vector(0, 0, 0);
+            cam.ViewportWidth = 12;
+            cam.ViewportHeight = 9;
 
             //  setup raytracer
             mRaytracer.Scene = mScene;
@@ -126,36 +126,10 @@ namespace UnilightRaytracer
             mScene.setAmbientColor(Color.black);
         }
 
-        /*    
-        public void handleAmbientChanged(java.awt.Color col)
-        {
-            scene.setAmbientColor(new model.Color(col.getRed() / 255, col.getGreen() / 255, col.getBlue() / 255));
-        }
-
-        public void handleOpenScene(String dataFile) throws Exception
-            {
-                SerializationStorage sto = SerializationStorage.getInstance();
-                sto.setDataFile(dataFile);
-                scene = sto.load ();
-                rt.setScene(scene);
-            }*/
-
-        /*    public void handleFogColorChanged(java.awt.Color col)
-            {
-                rt.setFogCol(new model.Color (col.getRed() / 255, col.getGreen() / 255, col.getBlue() / 255));
-            }*/
-
-        /*public void handleSaveScene( String dataFile) throws Exception
-        {
-            SerializationStorage sto = SerializationStorage.getInstance( );
-            sto.setDataFile( dataFile );
-            sto.save( scene );
-        }*/
-
         public SettingsInfo LoadSettings()
         {
             SettingsInfo info = new SettingsInfo();
-            info.globalReflection = mRaytracer.GlobalReflection;
+            info.globalReflection = mRaytracer.ApplyGlobalReflection;
             info.computeSpecular = mRaytracer.ComputeSpecular;
             info.computeDiffuse = mRaytracer.ComputeDiffuse;
             info.computeAmbient = mRaytracer.ComputeAmbient;
@@ -163,38 +137,27 @@ namespace UnilightRaytracer
             info.depth = mRaytracer.getMaxTraceDepth();
 
             Camera cam = mRaytracer.getCamera();
-            info.eye = cam.getEye();
-            info.lookAt = cam.getLookAt();
-            info.width = cam.getViewportWidth();
-            info.height = cam.getViewportHeight();
+            info.eye = cam.Eye;
+            info.lookAt = cam.LookAt;
+            info.width = cam.ViewportWidth;
+            info.height = cam.ViewportHeight;
             return info;
         }
 
         public void UpdateSettings(SettingsInfo info)
-        {
-            //if (!mRenderThread.MustRender)
-            //{
-            //    mRaytracer.setMaxTraceDepth(info.depth);
-            //    mRaytracer.ComputeAmbient = info.globalReflection;
-            //    mRaytracer.ComputeAmbient = info.computeSpecular;
-            //    mRaytracer.ComputeAmbient = info.computeDiffuse;
-            //    mRaytracer.ComputeAmbient = info.computeAmbient;
-            //    mRaytracer.ComputeAmbient = info.computeFog;
+        {            
+            mRaytracer.setMaxTraceDepth(info.depth);
+            mRaytracer.ComputeAmbient = info.globalReflection;
+            mRaytracer.ComputeAmbient = info.computeSpecular;
+            mRaytracer.ComputeAmbient = info.computeDiffuse;
+            mRaytracer.ComputeAmbient = info.computeAmbient;
+            mRaytracer.ComputeAmbient = info.computeFog;
 
-            //    Camera cam = mRaytracer.getCamera();
-            //    cam.setEye(info.eye);
-            //    cam.setLookAt(info.lookAt);
-            //    cam.setViewportWidth(info.width);
-            //    cam.setViewportHeight(info.height);
-            //}
-        }
-
-        public void handleRender()
-        {
-            //if (!mRenderThread.MustRender)
-            //{
-            //    mRenderThread.MustRender = true;
-            //}
+            Camera cam = mRaytracer.getCamera();
+            cam.Eye = info.eye;
+            cam.LookAt = info.lookAt;
+            cam.ViewportWidth = info.width;
+            cam.ViewportHeight = info.height;
         }
 
         public void handleStopRender()
@@ -205,7 +168,7 @@ namespace UnilightRaytracer
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonRender_Click(object sender, EventArgs e)
         {
             Render();
         }

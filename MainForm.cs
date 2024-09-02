@@ -86,7 +86,7 @@ namespace UnilightRaytracer
             p.setName("Point Light");
             p.setEnabled(true);
 
-            mScene.addLight(p);
+            mScene.AddLight(p);
         }
 
         public MainForm()
@@ -112,7 +112,8 @@ namespace UnilightRaytracer
             mRaytracer.Scene = mScene;
             mRaytracer.Callback = UpdateRenderProgress;
             mRaytracer.setCamera(cam);
-            mRaytracer.setImage(mImage);            
+            mRaytracer.setImage(mImage);
+            mRaytracer.ComputeFog = false;
             mRaytracer.ComputeAmbient = true;
             mRaytracer.ComputeSpecular = true;
             mRaytracer.ComputeDiffuse = true;
@@ -133,15 +134,14 @@ namespace UnilightRaytracer
         {
             mScene.clearLights();
             mScene.clearObjects();
-            mScene.setAmbientColor(Color.black);
+            mScene.AmbientColor = Color.black;
         }
 
         private void btnCloseScene_Click(object sender, EventArgs e)
         {
             mScene.clearLights();
             mScene.clearObjects();
-            mScene.setAmbientColor(Color.black);
-            mScene.setAmbientColor(Color.black);
+            mScene.AmbientColor = Color.black;
         }
 
         public SettingsInfo LoadSettings()

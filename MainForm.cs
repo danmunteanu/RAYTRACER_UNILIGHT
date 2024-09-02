@@ -50,19 +50,17 @@ namespace UnilightRaytracer
         {
             mScene = new Scene();
 
-            Sphere sphere_1 = null;
-            Material m = null;
+            Sphere s1 = null;
+            s1 = new Sphere();
+            s1.Origin = new Vector(-3.5f, 0, 0);
+            s1.Material.Color = Color.blue;
+            s1.Material.Gloss = 15;
+            s1.Material.Specular = 0.9f;
+            s1.Material.Reflection = 0.2f;
+            s1.Radius = 2.5f;
+            s1.Enabled = true;
 
-            sphere_1 = new Sphere();
-            sphere_1.Origin = new Vector(-3.5f, 0, 0);
-            sphere_1.Material.Color = Color.blue;
-            sphere_1.Material.Gloss = 15;
-            sphere_1.Material.Specular = 0.9f;
-            sphere_1.Material.Reflection = 0.2f;
-            sphere_1.Radius = 2.5f;
-            sphere_1.Enabled = true;
-
-            mScene.addObject(sphere_1);
+            mScene.addObject(s1);
 
             PointLight p = new PointLight();
             p.setPosition(new Vector(0, 15, 35));
@@ -85,22 +83,12 @@ namespace UnilightRaytracer
             panelRender, new object[] { true });*/
             //  Storage storage = new SerializationStorage();
             
-            mRaytracer.setImage (mImage);
-            
             //  setup camera
             Camera cam = new Camera();
             cam.setEye(new Vector(0, 15, 35));
             cam.setLookAt(new Vector(0, 0, 0));
             cam.setViewportWidth(12);
             cam.setViewportHeight(9);
-
-            //  setup main frame
-            /*          javax.swing.JFrame.setDefaultLookAndFeelDecorated(true);
-            //            RenderFrame mainFrame = null;
-                      mainFrame = new RenderFrame(image);
-                      utils.Common.centerFrame(mainFrame);
-                      mainFrame.setController(control);
-                      mainFrame.setVisible(true);*/
 
             //  setup raytracer
             mRaytracer.Scene = mScene;
@@ -114,6 +102,8 @@ namespace UnilightRaytracer
 
             //  add mainFrame as an observer for the image
             /*image.getSubject().addObserver(mainFrame);*/
+            
+            this.CenterToScreen();
         }
 
         private void MainForm_Load(object sender, EventArgs e)

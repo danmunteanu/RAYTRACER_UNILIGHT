@@ -55,11 +55,11 @@ namespace UnilightRaytracer
             Material m = null;
 
             m = new Material();
-            m.setColor(Color.blue);
+            m.Color = Color.blue;
 
             sph = new Sphere();
-            sph.setOrigin(new Vector(-3.5f, 0, 0));
-            sph.setMaterial(m);
+            sph.Origin = new Vector(-3.5f, 0, 0);
+            sph.Material = m;
 
             mScene.addObject(sph);
         }

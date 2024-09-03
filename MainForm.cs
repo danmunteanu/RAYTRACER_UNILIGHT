@@ -58,7 +58,7 @@ namespace UnilightRaytracer
             s1.Material.Reflection = 0.2f;
             s1.Radius = 2.5f;
             s1.Enabled = true;
-            mScene.addObject(s1);
+            mScene.AddObject(s1);
 
             Sphere s2 = new Sphere();
             s2.Origin = new Vector(3, 0, 0);
@@ -68,7 +68,7 @@ namespace UnilightRaytracer
             s2.Material.Reflection = 0.3f;
             s2.Radius = 1;
             s2.Enabled = true;
-            mScene.addObject(s2);
+            mScene.AddObject(s2);
 
             Sphere s3 = new Sphere();
             s3.Origin = new Vector(0, 0, 0);
@@ -78,7 +78,7 @@ namespace UnilightRaytracer
             s3.Material.Reflection = 0;
             s3.Radius = 0.55f;
             s3.Enabled = true;
-            mScene.addObject(s3);
+            mScene.AddObject(s3);
 
             PointLight p = new PointLight();
             p.setPosition(new Vector(0, 15, 35));
@@ -127,16 +127,14 @@ namespace UnilightRaytracer
 
         private void btnNewScene_Click(object sender, EventArgs e)
         {
-            mScene.clearLights();
-            mScene.clearObjects();
-            mScene.AmbientColor = Color.black;
+            mScene.ClearLights();
+            mScene.ClearObjects();            
         }
 
         private void btnCloseScene_Click(object sender, EventArgs e)
         {
-            mScene.clearLights();
-            mScene.clearObjects();
-            mScene.AmbientColor = Color.black;            
+            mScene.ClearLights();
+            mScene.ClearObjects();            
         }
 
         public SettingsInfo LoadSettings()

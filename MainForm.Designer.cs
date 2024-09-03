@@ -97,8 +97,7 @@
             Controls.Add(progressRender);
             Margin = new Padding(4, 5, 4, 5);
             Name = "MainForm";
-            Text = "Form1";
-            Load += MainForm_Load;
+            Text = "Form1";            
             ((System.ComponentModel.ISupportInitialize)pictureRender).EndInit();
             ResumeLayout(false);
         }

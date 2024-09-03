@@ -117,17 +117,12 @@ namespace UnilightRaytracer
             mRaytracer.ComputeAmbient = true;
             mRaytracer.ComputeSpecular = true;
             mRaytracer.ComputeDiffuse = true;
-            mRaytracer.setMaxTraceDepth(5);
+            mRaytracer.MaxTraceDepth = 5;
 
             //  add mainFrame as an observer for the image
             /*image.getSubject().addObserver(mainFrame);*/
             
             this.CenterToScreen();
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void btnNewScene_Click(object sender, EventArgs e)
@@ -141,7 +136,7 @@ namespace UnilightRaytracer
         {
             mScene.clearLights();
             mScene.clearObjects();
-            mScene.AmbientColor = Color.black;
+            mScene.AmbientColor = Color.black;            
         }
 
         public SettingsInfo LoadSettings()
@@ -152,7 +147,7 @@ namespace UnilightRaytracer
             info.computeDiffuse = mRaytracer.ComputeDiffuse;
             info.computeAmbient = mRaytracer.ComputeAmbient;
             info.computeFog = mRaytracer.ComputeFog;
-            info.depth = mRaytracer.getMaxTraceDepth();
+            info.depth = mRaytracer.MaxTraceDepth;
 
             Camera cam = mRaytracer.getCamera();
             info.eye = cam.Eye;
@@ -164,7 +159,7 @@ namespace UnilightRaytracer
 
         public void UpdateSettings(SettingsInfo info)
         {            
-            mRaytracer.setMaxTraceDepth(info.depth);
+            mRaytracer.MaxTraceDepth = info.depth;
             mRaytracer.ComputeAmbient = info.globalReflection;
             mRaytracer.ComputeAmbient = info.computeSpecular;
             mRaytracer.ComputeAmbient = info.computeDiffuse;
@@ -176,14 +171,6 @@ namespace UnilightRaytracer
             cam.LookAt = info.lookAt;
             cam.ViewportWidth = info.width;
             cam.ViewportHeight = info.height;
-        }
-
-        public void handleStopRender()
-        {
-            if (!mRaytracer.isStopRender())
-            {
-                mRaytracer.setStopRender(true);
-            }
         }
 
         private void buttonRender_Click(object sender, EventArgs e)

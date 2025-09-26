@@ -14,8 +14,8 @@ namespace UnilightRaytracer
             public bool computeAmbient = true;
             public bool computeFog = true;
             public int depth = 1;
-            public Vector? eye = null;
-            public Vector? lookAt = null;
+            public Vector eye;
+            public Vector lookAt;
             public float width = 0;
             public float height = 0;
         }

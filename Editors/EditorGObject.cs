@@ -60,9 +60,11 @@ namespace RAYTRACER_UNILIGHT.Editors
 
             obj.Name = txtName.Text;
 
-            obj.Origin.X = (float)numX.Value;
-            obj.Origin.Y = (float)numY.Value;
-            obj.Origin.Z = (float)numZ.Value;
+            Vector temp = obj.Origin;
+            temp.X = (float)numX.Value;
+            temp.Y = (float)numY.Value;
+            temp.Z = (float)numZ.Value;
+            obj.Origin = temp;
 
             editorMaterial.SaveState(item);
 

@@ -19,7 +19,7 @@ namespace RAYTRACER_UNILIGHT.Editors
             InitializeComponent();
         }
 
-        public void Clear()
+        public override void ResetState()
         {
             numX.Value = 0;
             numY.Value = 0;

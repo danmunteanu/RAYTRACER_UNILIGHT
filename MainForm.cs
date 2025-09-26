@@ -127,7 +127,7 @@ namespace UnilightRaytracer
             //  add mainFrame as an observer for the image
             /*image.getSubject().addObserver(mainFrame);*/
 
-            editorGObject.Clear();
+            editorGObject.ResetState();
             editorGObject.Enabled = false;
 
             this.CenterToScreen();

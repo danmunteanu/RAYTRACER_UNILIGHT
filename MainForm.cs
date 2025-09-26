@@ -81,6 +81,10 @@ namespace UnilightRaytracer
             s3.Enabled = true;
             mScene.AddObject(s3);
 
+            Plane pln = new();
+            pln.Material.Color = Color.yellow;
+            mScene.AddObject(pln);
+
             PointLight p = new PointLight();
             p.setPosition(new Vector(0, 15, 35));
             p.setColor(Color.white);
@@ -139,7 +143,7 @@ namespace UnilightRaytracer
         private void RegisterEditors()
         {
             EditorFactory.Register(typeof(Sphere).Name, () => new EditorSphere());
-            //EditorFactory.Register(typeof(Plane).Name, () => new EditorPlane());
+            EditorFactory.Register(typeof(Plane).Name, () => new EditorPlane());
         }
 
         private void LoadItemsList()

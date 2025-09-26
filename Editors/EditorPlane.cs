@@ -16,7 +16,7 @@ namespace RAYTRACER_UNILIGHT.Editors
     {
         public EditorPlane()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
 
         public override bool ValidateState()
@@ -35,5 +35,22 @@ namespace RAYTRACER_UNILIGHT.Editors
 
             numDistance.Value = (decimal)pl.Distance;
         }
+
+        public override void SaveState(object item)
+        {
+            if (!(item is Plane pl))
+                return;
+
+            // Update the plane's normal
+            pl.Normal = new Vector(
+                (float)numX.Value,
+                (float)numY.Value,
+                (float)numZ.Value
+            );
+
+            // Update the plane's distance
+            pl.Distance = (float)numDistance.Value;
+        }
+
     }
 }

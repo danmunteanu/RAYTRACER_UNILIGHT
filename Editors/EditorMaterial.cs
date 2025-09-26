@@ -44,5 +44,18 @@ namespace RAYTRACER_UNILIGHT.Editors
             numSpecular.Value = (decimal)obj.Material.Specular;
             numReflection.Value = (decimal)obj.Material.Reflection;
         }
+
+        public override void SaveState(object item)
+        {
+            if (!(item is GObject obj))
+                return;
+
+            if (obj.Material == null)
+                return;
+
+            obj.Material.Gloss = (float)numGloss.Value;
+            obj.Material.Specular = (float)numSpecular.Value;
+            obj.Material.Reflection = (float)numReflection.Value;
+        }
     }
 }

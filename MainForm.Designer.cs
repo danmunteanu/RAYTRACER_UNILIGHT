@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             progressRender = new ProgressBar();
-            button1 = new Button();
+            btnRender = new Button();
             btnNewScene = new Button();
             btnCloseScene = new Button();
             pictureRender = new PictureBox();
@@ -59,16 +59,16 @@
             progressRender.Size = new Size(726, 28);
             progressRender.TabIndex = 1;
             // 
-            // button1
+            // btnRender
             // 
-            button1.Dock = DockStyle.Fill;
-            button1.Location = new Point(735, 3);
-            button1.Name = "button1";
-            button1.Size = new Size(114, 28);
-            button1.TabIndex = 2;
-            button1.Text = "RENDER";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += buttonRender_Click;
+            btnRender.Dock = DockStyle.Fill;
+            btnRender.Location = new Point(735, 3);
+            btnRender.Name = "btnRender";
+            btnRender.Size = new Size(114, 28);
+            btnRender.TabIndex = 2;
+            btnRender.Text = "RENDER";
+            btnRender.UseVisualStyleBackColor = true;
+            btnRender.Click += buttonRender_Click;
             // 
             // btnNewScene
             // 
@@ -128,7 +128,7 @@
             tableLayoutRender.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
             tableLayoutRender.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
             tableLayoutRender.Controls.Add(progressRender, 0, 0);
-            tableLayoutRender.Controls.Add(button1, 1, 0);
+            tableLayoutRender.Controls.Add(btnRender, 1, 0);
             tableLayoutRender.Controls.Add(btnSettings, 2, 0);
             tableLayoutRender.Dock = DockStyle.Fill;
             tableLayoutRender.Location = new Point(3, 556);
@@ -245,7 +245,7 @@
             ClientSize = new Size(978, 593);
             Controls.Add(tableLayoutMain);
             Name = "MainForm";
-            Text = "Raytracer Unilight";
+            Text = "Unilight Raytracer";
             ((System.ComponentModel.ISupportInitialize)pictureRender).EndInit();
             tableLayoutTop.ResumeLayout(false);
             tableLayoutRender.ResumeLayout(false);
@@ -257,7 +257,7 @@
 
         #endregion
         private ProgressBar progressRender;
-        private Button button1;
+        private Button btnRender;
         private Button btnNewScene;
         private Button btnCloseScene;
         private PictureBox pictureRender;

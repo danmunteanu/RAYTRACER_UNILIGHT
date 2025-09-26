@@ -34,6 +34,8 @@ namespace UnilightRaytracer
                 mRaytracer.Render();
                 pictureRender.Image = mImage.GetBitmap();
 
+                btnRender.BeginInvoke((System.Windows.Forms.MethodInvoker)(() => btnRender.Enabled = true));
+
             });
         }
 
@@ -52,7 +54,7 @@ namespace UnilightRaytracer
             Sphere s1 = new Sphere();
             s1.Origin = new Vector(-3.5f, 0, 0);
             s1.Material.Color = Color.blue;
-            s1.Material.Gloss = 2;
+            s1.Material.Gloss = 30;
             s1.Material.Specular = 1.0f;
             s1.Material.Reflection = 1.0f;
             s1.Radius = 2.5f;
@@ -62,7 +64,7 @@ namespace UnilightRaytracer
             Sphere s2 = new Sphere();
             s2.Origin = new Vector(3, 0, 0);
             s2.Material.Color = Color.red;
-            s2.Material.Gloss = 7;
+            s2.Material.Gloss = 50;
             s2.Material.Specular = 0.8f;
             s2.Material.Reflection = 0.3f;
             s2.Radius = 1;
@@ -72,7 +74,7 @@ namespace UnilightRaytracer
             Sphere s3 = new Sphere();
             s3.Origin = new Vector(0, 0, 0);
             s3.Material.Color = Color.green;
-            s3.Material.Gloss = 1;
+            s3.Material.Gloss = 10;
             s3.Material.Specular = 0;
             s3.Material.Reflection = 0;
             s3.Radius = 0.55f;
@@ -116,11 +118,12 @@ namespace UnilightRaytracer
             mRaytracer.Callback = UpdateRenderProgress;
             mRaytracer.setCamera(cam);
             mRaytracer.setImage(mImage);
+            mRaytracer.ApplyGlobalReflection = true;
             mRaytracer.ComputeFog = false;
             mRaytracer.ComputeAmbient = true;
             mRaytracer.ComputeSpecular = true;
             mRaytracer.ComputeDiffuse = true;
-            mRaytracer.MaxTraceDepth = 5;
+            mRaytracer.TraceDepth = 5;
 
             LoadItemsList();
 
@@ -168,7 +171,7 @@ namespace UnilightRaytracer
             info.computeDiffuse = mRaytracer.ComputeDiffuse;
             info.computeAmbient = mRaytracer.ComputeAmbient;
             info.computeFog = mRaytracer.ComputeFog;
-            info.depth = mRaytracer.MaxTraceDepth;
+            info.depth = mRaytracer.TraceDepth;
 
             Camera cam = mRaytracer.getCamera();
             info.eye = cam.Eye;
@@ -180,7 +183,7 @@ namespace UnilightRaytracer
 
         public void UpdateSettings(SettingsInfo info)
         {
-            mRaytracer.MaxTraceDepth = info.depth;
+            mRaytracer.TraceDepth = info.depth;
             mRaytracer.ComputeAmbient = info.globalReflection;
             mRaytracer.ComputeAmbient = info.computeSpecular;
             mRaytracer.ComputeAmbient = info.computeDiffuse;
@@ -196,6 +199,8 @@ namespace UnilightRaytracer
 
         private void buttonRender_Click(object sender, EventArgs e)
         {
+            btnRender.Enabled = false;
+            OnUpdate();
             Render();
         }
 
@@ -242,7 +247,7 @@ namespace UnilightRaytracer
             return true;
         }
 
-        private void btnUpdate_Click(object sender, EventArgs e)
+        private void OnUpdate()
         {
             if (lstItems.SelectedIndex == -1)
                 return;
@@ -259,6 +264,11 @@ namespace UnilightRaytracer
             }
 
             lstItems.Items[lstItems.SelectedIndex] = item.Name;
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            OnUpdate();
         }
     }
 }

@@ -59,6 +59,14 @@ namespace RAYTRACER_UNILIGHT.Editors
                 return;
 
             obj.Name = txtName.Text;
+
+            obj.Origin.X = (float)numX.Value;
+            obj.Origin.Y = (float)numY.Value;
+            obj.Origin.Z = (float)numZ.Value;
+
+            editorMaterial.SaveState(item);
+
+            obj.Enabled = chkEnabled.Checked;
         }
     }
 }

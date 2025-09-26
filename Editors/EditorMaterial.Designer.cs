@@ -113,6 +113,7 @@
             // 
             numGloss.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             numGloss.DecimalPlaces = 2;
+            numGloss.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
             numGloss.Location = new Point(73, 63);
             numGloss.Name = "numGloss";
             numGloss.Size = new Size(64, 23);
@@ -122,6 +123,7 @@
             // 
             numSpecular.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             numSpecular.DecimalPlaces = 2;
+            numSpecular.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
             numSpecular.Location = new Point(73, 98);
             numSpecular.Name = "numSpecular";
             numSpecular.Size = new Size(64, 23);
@@ -131,6 +133,7 @@
             // 
             numReflection.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             numReflection.DecimalPlaces = 2;
+            numReflection.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
             numReflection.Location = new Point(73, 133);
             numReflection.Name = "numReflection";
             numReflection.Size = new Size(64, 23);

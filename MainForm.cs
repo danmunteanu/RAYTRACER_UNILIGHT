@@ -136,6 +136,7 @@ namespace UnilightRaytracer
         private void RegisterEditors()
         {
             EditorFactory.Register(typeof(Sphere).Name, () => new EditorSphere());
+            //EditorFactory.Register(typeof(Plane).Name, () => new EditorPlane());
         }
 
         private void LoadItemsList()
@@ -221,6 +222,8 @@ namespace UnilightRaytracer
                 editor.LoadState(item);
                 AddUserControlToPanel(panelEditor, editor);
             }
+
+            btnUpdate.Enabled = true;
         }
 
         public static bool AddUserControlToPanel(Panel panel, UserControl control)
@@ -237,6 +240,25 @@ namespace UnilightRaytracer
             control.BringToFront();
 
             return true;
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            if (lstItems.SelectedIndex == -1)
+                return;
+
+            var item = mScene.GetObjectAt(lstItems.SelectedIndex);
+            if (item == null)
+                return;
+
+            editorGObject.SaveState(item);
+            var editor = mCache.FindOrCreateEditor(item.GetType().Name);
+            if (editor != null)
+            {
+                editor.SaveState(item);
+            }
+
+            lstItems.Items[lstItems.SelectedIndex] = item.Name;
         }
     }
 }

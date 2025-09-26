@@ -17,6 +17,11 @@ namespace RAYTRACER_UNILIGHT.Editors
         public EditorGObject()
         {
             InitializeComponent();
+
+            this.EnabledChanged += (s, e) =>
+            {
+                editorMaterial.Enabled = this.Enabled;
+            };
         }
 
         public override void ResetState()
@@ -42,12 +47,18 @@ namespace RAYTRACER_UNILIGHT.Editors
             numY.Value = (decimal)obj.Origin.Y;
             numZ.Value = (decimal)obj.Origin.Z;
 
+            editorMaterial.LoadState(item);
+            editorMaterial.Enabled = true;
+
             chkEnabled.Checked = obj.Enabled;
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        public override void SaveState(object item)
         {
+            if (!(item is GObject obj))
+                return;
 
+            obj.Name = txtName.Text;
         }
     }
 }

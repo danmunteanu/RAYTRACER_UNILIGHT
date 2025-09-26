@@ -12,9 +12,9 @@ using UnilightRaytracer;
 
 namespace RAYTRACER_UNILIGHT.Editors
 {
-    public partial class EditorSphere : EditorBase
+    public partial class EditorPlane : EditorBase
     {
-        public EditorSphere()
+        public EditorPlane()
         {
             InitializeComponent();
         }
@@ -26,18 +26,14 @@ namespace RAYTRACER_UNILIGHT.Editors
 
         public override void LoadState(object item)
         {
-            if (!(item is Sphere sp) )
+            if (!(item is Plane pl))
                 return;
 
-            numRadius.Value = (decimal)sp.Radius;
-        }
+            numX.Value = (decimal)pl.Normal.X;
+            numY.Value = (decimal)pl.Normal.Y;
+            numZ.Value = (decimal)pl.Normal.Z;
 
-        public override void SaveState(object item)
-        {
-            if (!(item is Sphere sp))
-                return;
-
-            sp.Radius = (float) numRadius.Value;
+            numDistance.Value = (decimal)pl.Distance;
         }
     }
 }

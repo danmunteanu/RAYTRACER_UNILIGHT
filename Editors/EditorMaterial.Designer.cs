@@ -36,6 +36,7 @@
             numGloss = new NumericUpDown();
             numSpecular = new NumericUpDown();
             numReflection = new NumericUpDown();
+            dlgColor = new ColorDialog();
             tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numGloss).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numSpecular).BeginInit();
@@ -46,7 +47,7 @@
             // 
             label1.Anchor = AnchorStyles.Right;
             label1.AutoSize = true;
-            label1.Location = new Point(105, 32);
+            label1.Location = new Point(28, 32);
             label1.Name = "label1";
             label1.Size = new Size(39, 15);
             label1.TabIndex = 0;
@@ -56,7 +57,7 @@
             // 
             label2.Anchor = AnchorStyles.Right;
             label2.AutoSize = true;
-            label2.Location = new Point(106, 67);
+            label2.Location = new Point(29, 67);
             label2.Name = "label2";
             label2.Size = new Size(38, 15);
             label2.TabIndex = 1;
@@ -66,7 +67,7 @@
             // 
             label3.Anchor = AnchorStyles.Right;
             label3.AutoSize = true;
-            label3.Location = new Point(89, 102);
+            label3.Location = new Point(12, 102);
             label3.Name = "label3";
             label3.Size = new Size(55, 15);
             label3.TabIndex = 2;
@@ -76,7 +77,7 @@
             // 
             label4.Anchor = AnchorStyles.Right;
             label4.AutoSize = true;
-            label4.Location = new Point(81, 137);
+            label4.Location = new Point(4, 137);
             label4.Name = "label4";
             label4.Size = new Size(63, 15);
             label4.TabIndex = 3;
@@ -84,18 +85,17 @@
             // 
             // tableLayoutPanel
             // 
-            tableLayoutPanel.ColumnCount = 4;
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 94F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 113F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel.Controls.Add(label1, 1, 1);
-            tableLayoutPanel.Controls.Add(label4, 1, 4);
-            tableLayoutPanel.Controls.Add(label2, 1, 2);
-            tableLayoutPanel.Controls.Add(label3, 1, 3);
-            tableLayoutPanel.Controls.Add(numGloss, 2, 2);
-            tableLayoutPanel.Controls.Add(numSpecular, 2, 3);
-            tableLayoutPanel.Controls.Add(numReflection, 2, 4);
+            tableLayoutPanel.ColumnCount = 3;
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel.Controls.Add(label1, 0, 1);
+            tableLayoutPanel.Controls.Add(label4, 0, 4);
+            tableLayoutPanel.Controls.Add(label2, 0, 2);
+            tableLayoutPanel.Controls.Add(label3, 0, 3);
+            tableLayoutPanel.Controls.Add(numGloss, 1, 2);
+            tableLayoutPanel.Controls.Add(numSpecular, 1, 3);
+            tableLayoutPanel.Controls.Add(numReflection, 1, 4);
             tableLayoutPanel.Dock = DockStyle.Fill;
             tableLayoutPanel.Location = new Point(0, 0);
             tableLayoutPanel.Name = "tableLayoutPanel";
@@ -106,31 +106,34 @@
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel.Size = new Size(314, 185);
+            tableLayoutPanel.Size = new Size(214, 185);
             tableLayoutPanel.TabIndex = 4;
             // 
             // numGloss
             // 
             numGloss.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            numGloss.Location = new Point(150, 63);
+            numGloss.DecimalPlaces = 2;
+            numGloss.Location = new Point(73, 63);
             numGloss.Name = "numGloss";
-            numGloss.Size = new Size(107, 23);
+            numGloss.Size = new Size(64, 23);
             numGloss.TabIndex = 4;
             // 
             // numSpecular
             // 
             numSpecular.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            numSpecular.Location = new Point(150, 98);
+            numSpecular.DecimalPlaces = 2;
+            numSpecular.Location = new Point(73, 98);
             numSpecular.Name = "numSpecular";
-            numSpecular.Size = new Size(107, 23);
+            numSpecular.Size = new Size(64, 23);
             numSpecular.TabIndex = 5;
             // 
             // numReflection
             // 
             numReflection.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            numReflection.Location = new Point(150, 133);
+            numReflection.DecimalPlaces = 2;
+            numReflection.Location = new Point(73, 133);
             numReflection.Name = "numReflection";
-            numReflection.Size = new Size(107, 23);
+            numReflection.Size = new Size(64, 23);
             numReflection.TabIndex = 6;
             // 
             // EditorMaterial
@@ -139,7 +142,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(tableLayoutPanel);
             Name = "EditorMaterial";
-            Size = new Size(314, 185);
+            Size = new Size(214, 185);
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numGloss).EndInit();
@@ -158,5 +161,6 @@
         private NumericUpDown numGloss;
         private NumericUpDown numSpecular;
         private NumericUpDown numReflection;
+        private ColorDialog dlgColor;
     }
 }

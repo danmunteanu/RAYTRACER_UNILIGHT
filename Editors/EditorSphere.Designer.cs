@@ -39,7 +39,7 @@
             // 
             lblRadius.Anchor = AnchorStyles.Right;
             lblRadius.AutoSize = true;
-            lblRadius.Location = new Point(7, 10);
+            lblRadius.Location = new Point(22, 10);
             lblRadius.Name = "lblRadius";
             lblRadius.Size = new Size(45, 15);
             lblRadius.TabIndex = 1;
@@ -49,19 +49,19 @@
             // 
             numRadius.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             numRadius.DecimalPlaces = 2;
-            numRadius.Location = new Point(58, 6);
+            numRadius.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numRadius.Location = new Point(73, 6);
             numRadius.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             numRadius.Name = "numRadius";
-            numRadius.Size = new Size(54, 23);
+            numRadius.Size = new Size(64, 23);
             numRadius.TabIndex = 2;
             // 
             // tableLayoutPanel
             // 
             tableLayoutPanel.ColumnCount = 3;
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 55F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayoutPanel.Controls.Add(lblRadius, 0, 0);
             tableLayoutPanel.Controls.Add(numRadius, 1, 0);
             tableLayoutPanel.Dock = DockStyle.Fill;

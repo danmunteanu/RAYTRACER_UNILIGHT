@@ -37,6 +37,7 @@
             label3 = new Label();
             colorDialog = new ColorDialog();
             panelMaterial = new Panel();
+            editorMaterial = new EditorMaterial();
             lblName = new Label();
             txtName = new TextBox();
             tableLayoutCoords = new TableLayoutPanel();
@@ -45,6 +46,7 @@
             ((System.ComponentModel.ISupportInitialize)numX).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numY).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numZ).BeginInit();
+            panelMaterial.SuspendLayout();
             tableLayoutCoords.SuspendLayout();
             tableLayoutName.SuspendLayout();
             tableLayoutMain.SuspendLayout();
@@ -60,13 +62,12 @@
             chkEnabled.TabIndex = 0;
             chkEnabled.Text = "Enabled";
             chkEnabled.UseVisualStyleBackColor = true;
-            chkEnabled.CheckedChanged += checkBox1_CheckedChanged;
             // 
             // numX
             // 
             numX.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             numX.DecimalPlaces = 2;
-            numX.Location = new Point(58, 32);
+            numX.Location = new Point(73, 32);
             numX.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numX.Minimum = new decimal(new int[] { 10000, 0, 0, int.MinValue });
             numX.Name = "numX";
@@ -77,7 +78,7 @@
             // 
             numY.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             numY.DecimalPlaces = 2;
-            numY.Location = new Point(118, 32);
+            numY.Location = new Point(133, 32);
             numY.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numY.Minimum = new decimal(new int[] { 10000, 0, 0, int.MinValue });
             numY.Name = "numY";
@@ -88,7 +89,7 @@
             // 
             numZ.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             numZ.DecimalPlaces = 2;
-            numZ.Location = new Point(178, 32);
+            numZ.Location = new Point(193, 32);
             numZ.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numZ.Minimum = new decimal(new int[] { 10000, 0, 0, int.MinValue });
             numZ.Name = "numZ";
@@ -99,7 +100,7 @@
             // 
             lblX.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblX.AutoSize = true;
-            lblX.Location = new Point(58, 10);
+            lblX.Location = new Point(73, 10);
             lblX.Name = "lblX";
             lblX.Size = new Size(14, 15);
             lblX.TabIndex = 4;
@@ -109,7 +110,7 @@
             // 
             label2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label2.AutoSize = true;
-            label2.Location = new Point(118, 10);
+            label2.Location = new Point(133, 10);
             label2.Name = "label2";
             label2.Size = new Size(14, 15);
             label2.TabIndex = 5;
@@ -119,7 +120,7 @@
             // 
             label3.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label3.AutoSize = true;
-            label3.Location = new Point(178, 10);
+            label3.Location = new Point(193, 10);
             label3.Name = "label3";
             label3.Size = new Size(14, 15);
             label3.TabIndex = 6;
@@ -127,17 +128,27 @@
             // 
             // panelMaterial
             // 
+            panelMaterial.Controls.Add(editorMaterial);
             panelMaterial.Dock = DockStyle.Fill;
             panelMaterial.Location = new Point(3, 116);
             panelMaterial.Name = "panelMaterial";
             panelMaterial.Size = new Size(338, 160);
             panelMaterial.TabIndex = 7;
             // 
+            // editorMaterial
+            // 
+            editorMaterial.Dock = DockStyle.Fill;
+            editorMaterial.Enabled = false;
+            editorMaterial.Location = new Point(0, 0);
+            editorMaterial.Name = "editorMaterial";
+            editorMaterial.Size = new Size(338, 160);
+            editorMaterial.TabIndex = 0;
+            // 
             // lblName
             // 
             lblName.Anchor = AnchorStyles.Right;
             lblName.AutoSize = true;
-            lblName.Location = new Point(10, 12);
+            lblName.Location = new Point(25, 12);
             lblName.Name = "lblName";
             lblName.Size = new Size(42, 15);
             lblName.TabIndex = 8;
@@ -146,15 +157,15 @@
             // txtName
             // 
             txtName.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtName.Location = new Point(58, 8);
+            txtName.Location = new Point(73, 8);
             txtName.Name = "txtName";
-            txtName.Size = new Size(198, 23);
+            txtName.Size = new Size(183, 23);
             txtName.TabIndex = 9;
             // 
             // tableLayoutCoords
             // 
             tableLayoutCoords.ColumnCount = 5;
-            tableLayoutCoords.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 55F));
+            tableLayoutCoords.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70F));
             tableLayoutCoords.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60F));
             tableLayoutCoords.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60F));
             tableLayoutCoords.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60F));
@@ -177,7 +188,7 @@
             // tableLayoutName
             // 
             tableLayoutName.ColumnCount = 3;
-            tableLayoutName.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 55F));
+            tableLayoutName.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70F));
             tableLayoutName.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutName.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 79F));
             tableLayoutName.Controls.Add(chkEnabled, 2, 0);
@@ -219,6 +230,7 @@
             ((System.ComponentModel.ISupportInitialize)numX).EndInit();
             ((System.ComponentModel.ISupportInitialize)numY).EndInit();
             ((System.ComponentModel.ISupportInitialize)numZ).EndInit();
+            panelMaterial.ResumeLayout(false);
             tableLayoutCoords.ResumeLayout(false);
             tableLayoutCoords.PerformLayout();
             tableLayoutName.ResumeLayout(false);
@@ -243,5 +255,6 @@
         private TableLayoutPanel tableLayoutCoords;
         private TableLayoutPanel tableLayoutName;
         private TableLayoutPanel tableLayoutMain;
+        private EditorMaterial editorMaterial;
     }
 }

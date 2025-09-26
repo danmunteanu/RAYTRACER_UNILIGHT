@@ -42,6 +42,7 @@
             lstItems = new ListBox();
             panelEditor = new Panel();
             editorGObject = new RAYTRACER_UNILIGHT.Editors.EditorGObject();
+            btnUpdate = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureRender).BeginInit();
             tableLayoutTop.SuspendLayout();
             tableLayoutRender.SuspendLayout();
@@ -186,13 +187,15 @@
             tableLayoutItems.Controls.Add(lstItems, 0, 0);
             tableLayoutItems.Controls.Add(panelEditor, 0, 2);
             tableLayoutItems.Controls.Add(editorGObject, 0, 1);
+            tableLayoutItems.Controls.Add(btnUpdate, 0, 3);
             tableLayoutItems.Dock = DockStyle.Fill;
             tableLayoutItems.Location = new Point(3, 3);
             tableLayoutItems.Name = "tableLayoutItems";
-            tableLayoutItems.RowCount = 3;
+            tableLayoutItems.RowCount = 4;
             tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Absolute, 241F));
             tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Absolute, 65F));
+            tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
             tableLayoutItems.Size = new Size(278, 501);
             tableLayoutItems.TabIndex = 10;
             // 
@@ -203,14 +206,14 @@
             lstItems.ItemHeight = 15;
             lstItems.Location = new Point(3, 3);
             lstItems.Name = "lstItems";
-            lstItems.Size = new Size(272, 189);
+            lstItems.Size = new Size(272, 154);
             lstItems.TabIndex = 6;
             lstItems.SelectedIndexChanged += lstItems_SelectedIndexChanged;
             // 
             // panelEditor
             // 
             panelEditor.Dock = DockStyle.Fill;
-            panelEditor.Location = new Point(3, 439);
+            panelEditor.Location = new Point(3, 404);
             panelEditor.Name = "panelEditor";
             panelEditor.Size = new Size(272, 59);
             panelEditor.TabIndex = 7;
@@ -218,10 +221,22 @@
             // editorGObject
             // 
             editorGObject.Dock = DockStyle.Fill;
-            editorGObject.Location = new Point(3, 198);
+            editorGObject.Location = new Point(3, 163);
             editorGObject.Name = "editorGObject";
             editorGObject.Size = new Size(272, 235);
             editorGObject.TabIndex = 8;
+            // 
+            // btnUpdate
+            // 
+            btnUpdate.Dock = DockStyle.Fill;
+            btnUpdate.Enabled = false;
+            btnUpdate.Location = new Point(3, 469);
+            btnUpdate.Name = "btnUpdate";
+            btnUpdate.Size = new Size(272, 29);
+            btnUpdate.TabIndex = 9;
+            btnUpdate.Text = "UPDATE";
+            btnUpdate.UseVisualStyleBackColor = true;
+            btnUpdate.Click += btnUpdate_Click;
             // 
             // MainForm
             // 
@@ -255,5 +270,6 @@
         private TableLayoutPanel tableLayoutItems;
         private Panel panelEditor;
         private RAYTRACER_UNILIGHT.Editors.EditorGObject editorGObject;
+        private Button btnUpdate;
     }
 }

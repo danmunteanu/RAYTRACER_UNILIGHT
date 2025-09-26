@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LibUnilight\LibUnilight.csproj" />
+    <ProjectReference Include="..\LIB_UNILIGHT\LIB_UNILIGHT.csproj" />
   </ItemGroup>
 
   <ItemGroup>

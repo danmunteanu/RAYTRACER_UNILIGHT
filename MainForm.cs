@@ -13,8 +13,8 @@ namespace UnilightRaytracer
             public bool computeAmbient = true;
             public bool computeFog = true;
             public int depth = 1;
-            public Vector eye = null;
-            public Vector lookAt = null;
+            public Vector? eye = null;
+            public Vector? lookAt = null;
             public float width = 0;
             public float height = 0;
         }
@@ -29,6 +29,7 @@ namespace UnilightRaytracer
                 mImage.Clear(Color.black);
                 mRaytracer.Render();                
                 pictureRender.Image = mImage.GetBitmap();
+                pictureRender.Dock = DockStyle.Fill;
                 
             });
         }
@@ -37,10 +38,7 @@ namespace UnilightRaytracer
         {
             //  progressRender.Value = percent;
 
-            System.Windows.Forms.MethodInvoker m = null; 
-            m = new System.Windows.Forms.MethodInvoker(
-                () => progressRender.Value = percent
-            );
+            System.Windows.Forms.MethodInvoker? m = new (() => progressRender.Value = percent);
             progressRender.Invoke(m);
         }
 

@@ -148,7 +148,7 @@
             ClientSize = new Size(797, 464);
             Controls.Add(tableLayoutMain);
             Name = "MainForm";
-            Text = "Form1";
+            Text = "Raytracer Unilight";
             ((System.ComponentModel.ISupportInitialize)pictureRender).EndInit();
             tableLayoutTop.ResumeLayout(false);
             tableLayoutPanelRender.ResumeLayout(false);

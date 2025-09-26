@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="MainForm.Designer.cs~RF4eb24d.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\LIB_UNILIGHT\LIB_UNILIGHT.csproj" />
   </ItemGroup>
 

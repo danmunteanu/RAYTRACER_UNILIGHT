@@ -36,13 +36,11 @@ namespace UnilightRaytracer
 
         public void UpdateRenderProgress(int percent)
         {
-            //  progressRender.Value = percent;
-
             System.Windows.Forms.MethodInvoker? m = new (() => progressRender.Value = percent);
             progressRender.Invoke(m);
         }
 
-        private ObservableImage mImage = new ObservableImage(800, 600);
+        private ObservableImage mImage = new (800, 600);
 
         private void BuildScene()
         {

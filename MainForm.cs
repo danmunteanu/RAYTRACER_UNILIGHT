@@ -29,7 +29,6 @@ namespace UnilightRaytracer
                 mImage.Clear(Color.black);
                 mRaytracer.Render();                
                 pictureRender.Image = mImage.GetBitmap();
-                pictureRender.Dock = DockStyle.Fill;
                 
             });
         }
@@ -49,9 +48,9 @@ namespace UnilightRaytracer
             Sphere s1 = new Sphere();
             s1.Origin = new Vector(-3.5f, 0, 0);
             s1.Material.Color = Color.blue;
-            s1.Material.Gloss = 15;
-            s1.Material.Specular = 0.9f;
-            s1.Material.Reflection = 0.2f;
+            s1.Material.Gloss = 2;
+            s1.Material.Specular = 1.0f;
+            s1.Material.Reflection = 1.0f;
             s1.Radius = 2.5f;
             s1.Enabled = true;
             mScene.AddObject(s1);
@@ -96,13 +95,15 @@ namespace UnilightRaytracer
             | BindingFlags.Instance | BindingFlags.NonPublic, null,
             panelRender, new object[] { true });*/
             //  Storage storage = new SerializationStorage();
-            
+
             //  setup camera
-            Camera cam = new Camera();
-            cam.Eye = new Vector(0, 15, 35);
-            cam.LookAt = new Vector(0, 0, 0);
-            cam.ViewportWidth = 12;
-            cam.ViewportHeight = 9;
+            Camera cam = new()
+            {
+                Eye = new Vector(0, 15, 35),
+                LookAt = new Vector(0, 0, 0),
+                ViewportWidth = 12,
+                ViewportHeight = 9,
+            };            
 
             //  setup raytracer
             mRaytracer.Scene = mScene;
@@ -115,10 +116,21 @@ namespace UnilightRaytracer
             mRaytracer.ComputeDiffuse = true;
             mRaytracer.MaxTraceDepth = 5;
 
+            LoadItems();
+
             //  add mainFrame as an observer for the image
             /*image.getSubject().addObserver(mainFrame);*/
             
             this.CenterToScreen();
+        }
+
+        private void LoadItems()
+        {
+            for (int idx = 0; idx < mScene.CountObjects(); idx++)
+            {
+                var item = mScene.GetObjectAt(idx);
+                lstItems.Items.Add(item.Name);
+            }
         }
 
         private void btnNewScene_Click(object sender, EventArgs e)

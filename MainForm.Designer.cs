@@ -40,6 +40,8 @@
             tableLayoutCenter = new TableLayoutPanel();
             tableLayoutItems = new TableLayoutPanel();
             lstItems = new ListBox();
+            panelEditor = new Panel();
+            editorGObject = new RAYTRACER_UNILIGHT.Editors.EditorGObject();
             ((System.ComponentModel.ISupportInitialize)pictureRender).BeginInit();
             tableLayoutTop.SuspendLayout();
             tableLayoutRender.SuspendLayout();
@@ -53,13 +55,13 @@
             progressRender.Dock = DockStyle.Fill;
             progressRender.Location = new Point(3, 3);
             progressRender.Name = "progressRender";
-            progressRender.Size = new Size(714, 28);
+            progressRender.Size = new Size(726, 28);
             progressRender.TabIndex = 1;
             // 
             // button1
             // 
             button1.Dock = DockStyle.Fill;
-            button1.Location = new Point(723, 3);
+            button1.Location = new Point(735, 3);
             button1.Name = "button1";
             button1.Size = new Size(114, 28);
             button1.TabIndex = 2;
@@ -91,12 +93,13 @@
             // 
             // pictureRender
             // 
+            pictureRender.BackColor = System.Drawing.Color.Navy;
             pictureRender.BackgroundImageLayout = ImageLayout.None;
             pictureRender.Dock = DockStyle.Fill;
-            pictureRender.Location = new Point(247, 2);
+            pictureRender.Location = new Point(286, 2);
             pictureRender.Margin = new Padding(2);
             pictureRender.Name = "pictureRender";
-            pictureRender.Size = new Size(711, 506);
+            pictureRender.Size = new Size(684, 503);
             pictureRender.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureRender.TabIndex = 5;
             pictureRender.TabStop = false;
@@ -114,7 +117,7 @@
             tableLayoutTop.Name = "tableLayoutTop";
             tableLayoutTop.RowCount = 1;
             tableLayoutTop.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutTop.Size = new Size(960, 34);
+            tableLayoutTop.Size = new Size(972, 34);
             tableLayoutTop.TabIndex = 6;
             // 
             // tableLayoutRender
@@ -127,17 +130,17 @@
             tableLayoutRender.Controls.Add(button1, 1, 0);
             tableLayoutRender.Controls.Add(btnSettings, 2, 0);
             tableLayoutRender.Dock = DockStyle.Fill;
-            tableLayoutRender.Location = new Point(3, 559);
+            tableLayoutRender.Location = new Point(3, 556);
             tableLayoutRender.Name = "tableLayoutRender";
             tableLayoutRender.RowCount = 1;
             tableLayoutRender.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutRender.Size = new Size(960, 34);
+            tableLayoutRender.Size = new Size(972, 34);
             tableLayoutRender.TabIndex = 7;
             // 
             // btnSettings
             // 
             btnSettings.Dock = DockStyle.Fill;
-            btnSettings.Location = new Point(843, 3);
+            btnSettings.Location = new Point(855, 3);
             btnSettings.Name = "btnSettings";
             btnSettings.Size = new Size(114, 28);
             btnSettings.TabIndex = 3;
@@ -158,13 +161,13 @@
             tableLayoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             tableLayoutMain.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            tableLayoutMain.Size = new Size(966, 596);
+            tableLayoutMain.Size = new Size(978, 593);
             tableLayoutMain.TabIndex = 8;
             // 
             // tableLayoutCenter
             // 
             tableLayoutCenter.ColumnCount = 2;
-            tableLayoutCenter.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 245F));
+            tableLayoutCenter.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 284F));
             tableLayoutCenter.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutCenter.Controls.Add(tableLayoutItems, 0, 0);
             tableLayoutCenter.Controls.Add(pictureRender, 1, 0);
@@ -173,7 +176,7 @@
             tableLayoutCenter.Name = "tableLayoutCenter";
             tableLayoutCenter.RowCount = 1;
             tableLayoutCenter.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutCenter.Size = new Size(960, 510);
+            tableLayoutCenter.Size = new Size(972, 507);
             tableLayoutCenter.TabIndex = 9;
             // 
             // tableLayoutItems
@@ -181,13 +184,16 @@
             tableLayoutItems.ColumnCount = 1;
             tableLayoutItems.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutItems.Controls.Add(lstItems, 0, 0);
+            tableLayoutItems.Controls.Add(panelEditor, 0, 2);
+            tableLayoutItems.Controls.Add(editorGObject, 0, 1);
             tableLayoutItems.Dock = DockStyle.Fill;
             tableLayoutItems.Location = new Point(3, 3);
             tableLayoutItems.Name = "tableLayoutItems";
-            tableLayoutItems.RowCount = 2;
+            tableLayoutItems.RowCount = 3;
             tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Absolute, 175F));
-            tableLayoutItems.Size = new Size(239, 504);
+            tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Absolute, 241F));
+            tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Absolute, 65F));
+            tableLayoutItems.Size = new Size(278, 501);
             tableLayoutItems.TabIndex = 10;
             // 
             // lstItems
@@ -197,14 +203,31 @@
             lstItems.ItemHeight = 15;
             lstItems.Location = new Point(3, 3);
             lstItems.Name = "lstItems";
-            lstItems.Size = new Size(233, 323);
+            lstItems.Size = new Size(272, 189);
             lstItems.TabIndex = 6;
+            lstItems.SelectedIndexChanged += lstItems_SelectedIndexChanged;
+            // 
+            // panelEditor
+            // 
+            panelEditor.Dock = DockStyle.Fill;
+            panelEditor.Location = new Point(3, 439);
+            panelEditor.Name = "panelEditor";
+            panelEditor.Size = new Size(272, 59);
+            panelEditor.TabIndex = 7;
+            // 
+            // editorGObject
+            // 
+            editorGObject.Dock = DockStyle.Fill;
+            editorGObject.Location = new Point(3, 198);
+            editorGObject.Name = "editorGObject";
+            editorGObject.Size = new Size(272, 235);
+            editorGObject.TabIndex = 8;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(966, 596);
+            ClientSize = new Size(978, 593);
             Controls.Add(tableLayoutMain);
             Name = "MainForm";
             Text = "Raytracer Unilight";
@@ -230,5 +253,7 @@
         private ListBox lstItems;
         private Button btnSettings;
         private TableLayoutPanel tableLayoutItems;
+        private Panel panelEditor;
+        private RAYTRACER_UNILIGHT.Editors.EditorGObject editorGObject;
     }
 }

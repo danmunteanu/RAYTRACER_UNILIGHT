@@ -39,7 +39,7 @@
             // 
             lblRadius.Anchor = AnchorStyles.Right;
             lblRadius.AutoSize = true;
-            lblRadius.Location = new Point(71, 48);
+            lblRadius.Location = new Point(7, 10);
             lblRadius.Name = "lblRadius";
             lblRadius.Size = new Size(45, 15);
             lblRadius.TabIndex = 1;
@@ -48,28 +48,29 @@
             // numRadius
             // 
             numRadius.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            numRadius.Location = new Point(122, 44);
+            numRadius.DecimalPlaces = 2;
+            numRadius.Location = new Point(58, 6);
+            numRadius.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             numRadius.Name = "numRadius";
-            numRadius.Size = new Size(74, 23);
+            numRadius.Size = new Size(54, 23);
             numRadius.TabIndex = 2;
             // 
             // tableLayoutPanel
             // 
-            tableLayoutPanel.ColumnCount = 4;
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel.Controls.Add(lblRadius, 1, 1);
-            tableLayoutPanel.Controls.Add(numRadius, 2, 1);
+            tableLayoutPanel.ColumnCount = 3;
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 55F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel.Controls.Add(lblRadius, 0, 0);
+            tableLayoutPanel.Controls.Add(numRadius, 1, 0);
             tableLayoutPanel.Dock = DockStyle.Fill;
             tableLayoutPanel.Location = new Point(0, 0);
             tableLayoutPanel.Name = "tableLayoutPanel";
-            tableLayoutPanel.RowCount = 3;
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel.RowCount = 2;
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel.Size = new Size(239, 111);
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel.Size = new Size(239, 79);
             tableLayoutPanel.TabIndex = 3;
             // 
             // EditorSphere
@@ -78,7 +79,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(tableLayoutPanel);
             Name = "EditorSphere";
-            Size = new Size(239, 111);
+            Size = new Size(239, 79);
             ((System.ComponentModel.ISupportInitialize)numRadius).EndInit();
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();

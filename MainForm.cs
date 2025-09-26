@@ -1,4 +1,5 @@
 using LibUnilight;
+using RAYTRACER_UNILIGHT.Editors;
 using System.Reflection;
 
 namespace UnilightRaytracer
@@ -19,6 +20,9 @@ namespace UnilightRaytracer
             public float height = 0;
         }
 
+        //  stores created editors
+        private EditorCache mCache = new();
+
         private Scene mScene = new Scene();
         private Raytracer mRaytracer = new Raytracer();
 
@@ -27,19 +31,19 @@ namespace UnilightRaytracer
             await Task.Run(() =>
             {
                 mImage.Clear(Color.black);
-                mRaytracer.Render();                
+                mRaytracer.Render();
                 pictureRender.Image = mImage.GetBitmap();
-                
+
             });
         }
 
         public void UpdateRenderProgress(int percent)
         {
-            System.Windows.Forms.MethodInvoker? m = new (() => progressRender.Value = percent);
+            System.Windows.Forms.MethodInvoker? m = new(() => progressRender.Value = percent);
             progressRender.Invoke(m);
         }
 
-        private ObservableImage mImage = new (800, 600);
+        private ObservableImage mImage = new(800, 600);
 
         private void BuildScene()
         {
@@ -90,6 +94,8 @@ namespace UnilightRaytracer
 
             BuildScene();
 
+            RegisterEditors();
+
             //  Trigger Double Buffering
             /*typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty
             | BindingFlags.Instance | BindingFlags.NonPublic, null,
@@ -103,7 +109,7 @@ namespace UnilightRaytracer
                 LookAt = new Vector(0, 0, 0),
                 ViewportWidth = 12,
                 ViewportHeight = 9,
-            };            
+            };
 
             //  setup raytracer
             mRaytracer.Scene = mScene;
@@ -116,15 +122,23 @@ namespace UnilightRaytracer
             mRaytracer.ComputeDiffuse = true;
             mRaytracer.MaxTraceDepth = 5;
 
-            LoadItems();
+            LoadItemsList();
 
             //  add mainFrame as an observer for the image
             /*image.getSubject().addObserver(mainFrame);*/
-            
+
+            editorGObject.Clear();
+            editorGObject.Enabled = false;
+
             this.CenterToScreen();
         }
 
-        private void LoadItems()
+        private void RegisterEditors()
+        {
+            EditorFactory.Register(typeof(Sphere).Name, () => new EditorSphere());
+        }
+
+        private void LoadItemsList()
         {
             for (int idx = 0; idx < mScene.CountObjects(); idx++)
             {
@@ -136,13 +150,13 @@ namespace UnilightRaytracer
         private void btnNewScene_Click(object sender, EventArgs e)
         {
             mScene.ClearLights();
-            mScene.ClearObjects();            
+            mScene.ClearObjects();
         }
 
         private void btnCloseScene_Click(object sender, EventArgs e)
         {
             mScene.ClearLights();
-            mScene.ClearObjects();            
+            mScene.ClearObjects();
         }
 
         public SettingsInfo LoadSettings()
@@ -164,7 +178,7 @@ namespace UnilightRaytracer
         }
 
         public void UpdateSettings(SettingsInfo info)
-        {            
+        {
             mRaytracer.MaxTraceDepth = info.depth;
             mRaytracer.ComputeAmbient = info.globalReflection;
             mRaytracer.ComputeAmbient = info.computeSpecular;
@@ -182,6 +196,47 @@ namespace UnilightRaytracer
         private void buttonRender_Click(object sender, EventArgs e)
         {
             Render();
+        }
+
+        private void lstItems_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstItems.SelectedIndex == -1)
+            {
+                editorGObject.Enabled = false;
+                return;
+            }
+
+            var item = mScene.GetObjectAt(lstItems.SelectedIndex);
+            if (item == null)
+                return;
+
+            //  load common GObject properties
+            editorGObject.LoadState(item);
+            editorGObject.Enabled = true;
+
+            //  load specific editor
+            var editor = mCache.FindOrCreateEditor(item.GetType().Name);
+            if (editor != null)
+            {
+                editor.LoadState(item);
+                AddUserControlToPanel(panelEditor, editor);
+            }
+        }
+
+        public static bool AddUserControlToPanel(Panel panel, UserControl control)
+        {
+            if (panel.Controls.Contains(control))
+                return false;
+
+            if (control == null)
+                return false;
+
+            control.Dock = DockStyle.Fill;
+            panel.Controls.Clear();
+            panel.Controls.Add(control);
+            control.BringToFront();
+
+            return true;
         }
     }
 }

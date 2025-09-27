@@ -1,4 +1,3 @@
-using LibUnilight;
 using RAYTRACER_UNILIGHT.Editors;
 using System.Reflection;
 

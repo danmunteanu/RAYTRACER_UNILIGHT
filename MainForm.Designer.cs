@@ -39,16 +39,20 @@
             tableLayoutMain = new TableLayoutPanel();
             tableLayoutCenter = new TableLayoutPanel();
             tableLayoutItems = new TableLayoutPanel();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            btnReset = new Button();
+            btnUpdate = new Button();
             lstItems = new ListBox();
             panelEditor = new Panel();
             editorGObject = new RAYTRACER_UNILIGHT.Editors.EditorGObject();
-            btnUpdate = new Button();
+            lblObjects = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureRender).BeginInit();
             tableLayoutTop.SuspendLayout();
             tableLayoutRender.SuspendLayout();
             tableLayoutMain.SuspendLayout();
             tableLayoutCenter.SuspendLayout();
             tableLayoutItems.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // progressRender
@@ -73,6 +77,7 @@
             // btnNewScene
             // 
             btnNewScene.Dock = DockStyle.Fill;
+            btnNewScene.Enabled = false;
             btnNewScene.Location = new Point(3, 3);
             btnNewScene.Name = "btnNewScene";
             btnNewScene.Size = new Size(74, 28);
@@ -84,6 +89,7 @@
             // btnCloseScene
             // 
             btnCloseScene.Dock = DockStyle.Fill;
+            btnCloseScene.Enabled = false;
             btnCloseScene.Location = new Point(83, 3);
             btnCloseScene.Name = "btnCloseScene";
             btnCloseScene.Size = new Size(74, 28);
@@ -184,29 +190,70 @@
             // 
             tableLayoutItems.ColumnCount = 1;
             tableLayoutItems.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutItems.Controls.Add(lstItems, 0, 0);
-            tableLayoutItems.Controls.Add(panelEditor, 0, 2);
-            tableLayoutItems.Controls.Add(editorGObject, 0, 1);
-            tableLayoutItems.Controls.Add(btnUpdate, 0, 3);
+            tableLayoutItems.Controls.Add(tableLayoutPanel1, 0, 4);
+            tableLayoutItems.Controls.Add(lstItems, 0, 1);
+            tableLayoutItems.Controls.Add(panelEditor, 0, 3);
+            tableLayoutItems.Controls.Add(editorGObject, 0, 2);
+            tableLayoutItems.Controls.Add(lblObjects, 0, 0);
             tableLayoutItems.Dock = DockStyle.Fill;
             tableLayoutItems.Location = new Point(3, 3);
             tableLayoutItems.Name = "tableLayoutItems";
-            tableLayoutItems.RowCount = 4;
+            tableLayoutItems.RowCount = 5;
+            tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
             tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Absolute, 241F));
+            tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Absolute, 240F));
             tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Absolute, 65F));
             tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
             tableLayoutItems.Size = new Size(278, 501);
             tableLayoutItems.TabIndex = 10;
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Controls.Add(btnReset, 1, 0);
+            tableLayoutPanel1.Controls.Add(btnUpdate, 0, 0);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new Point(3, 469);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 1;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Size = new Size(272, 29);
+            tableLayoutPanel1.TabIndex = 9;
+            // 
+            // btnReset
+            // 
+            btnReset.Dock = DockStyle.Fill;
+            btnReset.Enabled = false;
+            btnReset.Location = new Point(136, 0);
+            btnReset.Margin = new Padding(0);
+            btnReset.Name = "btnReset";
+            btnReset.Size = new Size(136, 29);
+            btnReset.TabIndex = 10;
+            btnReset.Text = "RESET";
+            btnReset.UseVisualStyleBackColor = true;
+            // 
+            // btnUpdate
+            // 
+            btnUpdate.Enabled = false;
+            btnUpdate.Location = new Point(0, 0);
+            btnUpdate.Margin = new Padding(0);
+            btnUpdate.Name = "btnUpdate";
+            btnUpdate.Size = new Size(136, 29);
+            btnUpdate.TabIndex = 9;
+            btnUpdate.Text = "UPDATE";
+            btnUpdate.UseVisualStyleBackColor = true;
+            btnUpdate.Click += btnUpdate_Click;
             // 
             // lstItems
             // 
             lstItems.Dock = DockStyle.Fill;
             lstItems.FormattingEnabled = true;
             lstItems.ItemHeight = 15;
-            lstItems.Location = new Point(3, 3);
+            lstItems.Location = new Point(3, 28);
             lstItems.Name = "lstItems";
-            lstItems.Size = new Size(272, 154);
+            lstItems.Size = new Size(272, 130);
             lstItems.TabIndex = 6;
             lstItems.SelectedIndexChanged += lstItems_SelectedIndexChanged;
             // 
@@ -221,22 +268,20 @@
             // editorGObject
             // 
             editorGObject.Dock = DockStyle.Fill;
-            editorGObject.Location = new Point(3, 163);
+            editorGObject.Location = new Point(3, 164);
             editorGObject.Name = "editorGObject";
-            editorGObject.Size = new Size(272, 235);
+            editorGObject.Size = new Size(272, 234);
             editorGObject.TabIndex = 8;
             // 
-            // btnUpdate
+            // lblObjects
             // 
-            btnUpdate.Dock = DockStyle.Fill;
-            btnUpdate.Enabled = false;
-            btnUpdate.Location = new Point(3, 469);
-            btnUpdate.Name = "btnUpdate";
-            btnUpdate.Size = new Size(272, 29);
-            btnUpdate.TabIndex = 9;
-            btnUpdate.Text = "UPDATE";
-            btnUpdate.UseVisualStyleBackColor = true;
-            btnUpdate.Click += btnUpdate_Click;
+            lblObjects.Anchor = AnchorStyles.Left;
+            lblObjects.AutoSize = true;
+            lblObjects.Location = new Point(3, 5);
+            lblObjects.Name = "lblObjects";
+            lblObjects.Size = new Size(82, 15);
+            lblObjects.TabIndex = 10;
+            lblObjects.Text = "Scene objects:";
             // 
             // MainForm
             // 
@@ -252,6 +297,8 @@
             tableLayoutMain.ResumeLayout(false);
             tableLayoutCenter.ResumeLayout(false);
             tableLayoutItems.ResumeLayout(false);
+            tableLayoutItems.PerformLayout();
+            tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -271,5 +318,8 @@
         private Panel panelEditor;
         private RAYTRACER_UNILIGHT.Editors.EditorGObject editorGObject;
         private Button btnUpdate;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Button btnReset;
+        private Label lblObjects;
     }
 }

@@ -56,7 +56,7 @@
             // 
             chkEnabled.Anchor = AnchorStyles.Left;
             chkEnabled.AutoSize = true;
-            chkEnabled.Location = new Point(262, 10);
+            chkEnabled.Location = new Point(262, 5);
             chkEnabled.Name = "chkEnabled";
             chkEnabled.Size = new Size(68, 19);
             chkEnabled.TabIndex = 0;
@@ -67,7 +67,8 @@
             // 
             numX.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             numX.DecimalPlaces = 2;
-            numX.Location = new Point(73, 32);
+            numX.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numX.Location = new Point(73, 25);
             numX.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numX.Minimum = new decimal(new int[] { 10000, 0, 0, int.MinValue });
             numX.Name = "numX";
@@ -78,7 +79,8 @@
             // 
             numY.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             numY.DecimalPlaces = 2;
-            numY.Location = new Point(133, 32);
+            numY.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numY.Location = new Point(133, 25);
             numY.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numY.Minimum = new decimal(new int[] { 10000, 0, 0, int.MinValue });
             numY.Name = "numY";
@@ -89,7 +91,8 @@
             // 
             numZ.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             numZ.DecimalPlaces = 2;
-            numZ.Location = new Point(193, 32);
+            numZ.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numZ.Location = new Point(193, 25);
             numZ.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             numZ.Minimum = new decimal(new int[] { 10000, 0, 0, int.MinValue });
             numZ.Name = "numZ";
@@ -100,7 +103,7 @@
             // 
             lblX.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblX.AutoSize = true;
-            lblX.Location = new Point(73, 10);
+            lblX.Location = new Point(73, 5);
             lblX.Name = "lblX";
             lblX.Size = new Size(14, 15);
             lblX.TabIndex = 4;
@@ -110,7 +113,7 @@
             // 
             label2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label2.AutoSize = true;
-            label2.Location = new Point(133, 10);
+            label2.Location = new Point(133, 5);
             label2.Name = "label2";
             label2.Size = new Size(14, 15);
             label2.TabIndex = 5;
@@ -120,7 +123,7 @@
             // 
             label3.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label3.AutoSize = true;
-            label3.Location = new Point(193, 10);
+            label3.Location = new Point(193, 5);
             label3.Name = "label3";
             label3.Size = new Size(14, 15);
             label3.TabIndex = 6;
@@ -130,9 +133,9 @@
             // 
             panelMaterial.Controls.Add(editorMaterial);
             panelMaterial.Dock = DockStyle.Fill;
-            panelMaterial.Location = new Point(3, 116);
+            panelMaterial.Location = new Point(3, 98);
             panelMaterial.Name = "panelMaterial";
-            panelMaterial.Size = new Size(338, 160);
+            panelMaterial.Size = new Size(338, 178);
             panelMaterial.TabIndex = 7;
             // 
             // editorMaterial
@@ -141,14 +144,14 @@
             editorMaterial.Enabled = false;
             editorMaterial.Location = new Point(0, 0);
             editorMaterial.Name = "editorMaterial";
-            editorMaterial.Size = new Size(338, 160);
+            editorMaterial.Size = new Size(338, 178);
             editorMaterial.TabIndex = 0;
             // 
             // lblName
             // 
             lblName.Anchor = AnchorStyles.Right;
             lblName.AutoSize = true;
-            lblName.Location = new Point(25, 12);
+            lblName.Location = new Point(25, 7);
             lblName.Name = "lblName";
             lblName.Size = new Size(42, 15);
             lblName.TabIndex = 8;
@@ -157,7 +160,7 @@
             // txtName
             // 
             txtName.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtName.Location = new Point(73, 8);
+            txtName.Location = new Point(73, 3);
             txtName.Name = "txtName";
             txtName.Size = new Size(183, 23);
             txtName.TabIndex = 9;
@@ -177,12 +180,12 @@
             tableLayoutCoords.Controls.Add(label3, 3, 0);
             tableLayoutCoords.Controls.Add(label2, 2, 0);
             tableLayoutCoords.Dock = DockStyle.Fill;
-            tableLayoutCoords.Location = new Point(3, 48);
+            tableLayoutCoords.Location = new Point(3, 38);
             tableLayoutCoords.Name = "tableLayoutCoords";
             tableLayoutCoords.RowCount = 2;
-            tableLayoutCoords.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-            tableLayoutCoords.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-            tableLayoutCoords.Size = new Size(338, 62);
+            tableLayoutCoords.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutCoords.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutCoords.Size = new Size(338, 54);
             tableLayoutCoords.TabIndex = 10;
             // 
             // tableLayoutName
@@ -199,7 +202,7 @@
             tableLayoutName.Name = "tableLayoutName";
             tableLayoutName.RowCount = 1;
             tableLayoutName.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutName.Size = new Size(338, 39);
+            tableLayoutName.Size = new Size(338, 29);
             tableLayoutName.TabIndex = 11;
             // 
             // tableLayoutMain
@@ -213,10 +216,9 @@
             tableLayoutMain.Location = new Point(0, 0);
             tableLayoutMain.Name = "tableLayoutMain";
             tableLayoutMain.RowCount = 3;
-            tableLayoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 45F));
-            tableLayoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 68F));
+            tableLayoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
+            tableLayoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
             tableLayoutMain.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutMain.Size = new Size(344, 279);
             tableLayoutMain.TabIndex = 13;
             // 

@@ -36,6 +36,7 @@
             numGloss = new NumericUpDown();
             numSpecular = new NumericUpDown();
             numReflection = new NumericUpDown();
+            panelColor = new Panel();
             dlgColor = new ColorDialog();
             tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numGloss).BeginInit();
@@ -57,7 +58,7 @@
             // 
             label2.Anchor = AnchorStyles.Right;
             label2.AutoSize = true;
-            label2.Location = new Point(29, 67);
+            label2.Location = new Point(29, 68);
             label2.Name = "label2";
             label2.Size = new Size(38, 15);
             label2.TabIndex = 1;
@@ -67,7 +68,7 @@
             // 
             label3.Anchor = AnchorStyles.Right;
             label3.AutoSize = true;
-            label3.Location = new Point(12, 102);
+            label3.Location = new Point(12, 103);
             label3.Name = "label3";
             label3.Size = new Size(55, 15);
             label3.TabIndex = 2;
@@ -77,7 +78,7 @@
             // 
             label4.Anchor = AnchorStyles.Right;
             label4.AutoSize = true;
-            label4.Location = new Point(4, 137);
+            label4.Location = new Point(4, 138);
             label4.Name = "label4";
             label4.Size = new Size(63, 15);
             label4.TabIndex = 3;
@@ -96,12 +97,13 @@
             tableLayoutPanel.Controls.Add(numGloss, 1, 2);
             tableLayoutPanel.Controls.Add(numSpecular, 1, 3);
             tableLayoutPanel.Controls.Add(numReflection, 1, 4);
+            tableLayoutPanel.Controls.Add(panelColor, 1, 1);
             tableLayoutPanel.Dock = DockStyle.Fill;
             tableLayoutPanel.Location = new Point(0, 0);
             tableLayoutPanel.Name = "tableLayoutPanel";
             tableLayoutPanel.RowCount = 6;
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
@@ -114,7 +116,7 @@
             numGloss.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             numGloss.DecimalPlaces = 2;
             numGloss.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numGloss.Location = new Point(73, 63);
+            numGloss.Location = new Point(73, 64);
             numGloss.Name = "numGloss";
             numGloss.Size = new Size(64, 23);
             numGloss.TabIndex = 4;
@@ -124,7 +126,7 @@
             numSpecular.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             numSpecular.DecimalPlaces = 2;
             numSpecular.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numSpecular.Location = new Point(73, 98);
+            numSpecular.Location = new Point(73, 99);
             numSpecular.Name = "numSpecular";
             numSpecular.Size = new Size(64, 23);
             numSpecular.TabIndex = 5;
@@ -134,10 +136,22 @@
             numReflection.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             numReflection.DecimalPlaces = 2;
             numReflection.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numReflection.Location = new Point(73, 133);
+            numReflection.Location = new Point(73, 134);
             numReflection.Name = "numReflection";
             numReflection.Size = new Size(64, 23);
             numReflection.TabIndex = 6;
+            // 
+            // panelColor
+            // 
+            panelColor.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            panelColor.BorderStyle = BorderStyle.FixedSingle;
+            panelColor.Cursor = Cursors.Hand;
+            panelColor.Location = new Point(75, 27);
+            panelColor.Margin = new Padding(5);
+            panelColor.Name = "panelColor";
+            panelColor.Size = new Size(60, 25);
+            panelColor.TabIndex = 7;
+            panelColor.Click += panelColor_Click;
             // 
             // EditorMaterial
             // 
@@ -165,5 +179,6 @@
         private NumericUpDown numSpecular;
         private NumericUpDown numReflection;
         private ColorDialog dlgColor;
+        private Panel panelColor;
     }
 }

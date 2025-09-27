@@ -63,10 +63,11 @@ namespace UnilightRaytracer
             Sphere s2 = new Sphere();
             s2.Origin = new Vector(3, 0, 0);
             s2.Material.Color = Color.red;
-            s2.Material.Gloss = 50;
+            s2.Material.Gloss = 10;
             s2.Material.Specular = 0.8f;
-            s2.Material.Reflection = 0.3f;
+            s2.Material.Reflection = 0.0f;
             s2.Radius = 1;
+            s2.Name = "Red Sphere";
             s2.Enabled = true;
             mScene.AddObject(s2);
 

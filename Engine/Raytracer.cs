@@ -1,6 +1,5 @@
-/*
- * The actual raytracing algorithm
- */
+using CommonGraphics;
+
 namespace UnilightRaytracer
 {
     //  1st = Origin, 2nd = Direction
@@ -15,6 +14,9 @@ namespace UnilightRaytracer
     {
         private static int DEFAULT_TRACE_DEPTH = 5;
 
+        //  pixel traversal order
+        public TraversalOrder TraversalOrder { get; set; }
+
         private struct RayTraversalResult
         {
             public GObject? Closest { get; set; }
@@ -25,11 +27,11 @@ namespace UnilightRaytracer
         public delegate void UpdateCallback(int percent);
 
         public UpdateCallback? Callback { get; set; } = null;
-        
+
         public Camera Camera { get; set; } = new Camera();
-        
+
         public Scene? Scene { get; set; } = null;
-        
+
         //  Reference to the Bitmap we're drawing to
         public Bitmap? Buffer { get; set; } = null;
 
@@ -65,7 +67,7 @@ namespace UnilightRaytracer
 
             GObject? closest = null;
             float dist = float.MaxValue;
-            Vector intersectionPoint = new ();
+            Vector intersectionPoint = new();
 
             for (int k = 0; k < Scene.CountObjects(); ++k)
             {
@@ -171,45 +173,76 @@ namespace UnilightRaytracer
             if (Buffer == null)
                 return;
 
-            int imgWidth = Buffer.Width;
-            int imgHeight = Buffer.Height;
-            long total = imgWidth * imgHeight;
-            if (total <= 0) return;
+            List<(Point start, Point end)>? chunks = null;
+            Chunks.CreateRenderChunks(Buffer.Width, Buffer.Height, out chunks);
 
-            float factor = 100.0f / total;
-            int lastPercent = 0;
-            long count = 0;
+            if (chunks == null)
+                return;
 
-            Matrix4 i2v = imageToViewportTransform(imgWidth, imgHeight, Camera);
-            
-            for (int p = 0; !mStopRender && p < imgWidth; ++p)
-            {
-                for (int q = 0; !mStopRender && q < imgHeight; ++q)
-                {
-                    int percent = (int)(count * factor);
-                    if (percent != lastPercent && Callback != null) Callback(percent);
-                    lastPercent = percent;
+            // Lock the bitmap once
+            var rect = new Rectangle(0, 0, Buffer.Width, Buffer.Height);
+            var bmpData = Buffer.LockBits(rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-                    Vector mapped = i2v.Multiply(new Vector(p, q, 0));
-                    Vector dir = mapped - Camera.Eye;
-                    dir.Normalize();
-                    Ray ray = new Ray(Camera.Eye, dir);
+            IntPtr ptr = bmpData.Scan0;
+            int stride = bmpData.Stride;
+            byte[] pixels = new byte[stride * Buffer.Height];
 
-                    Color c = trace(ray, 1);
+            //_plottedPixels = 0;
+            //PixelsToPlotCount = Buffer.Width * Buffer.Height;
 
-                    Buffer.SetPixel(p, q, System.Drawing.Color.FromArgb(
-                        (int)Math.Round(c.r * 255),
-                        (int)Math.Round(c.g * 255),
-                        (int)Math.Round(c.b * 255)
-                    ));
+            // Render all chunks in parallel
+            //Parallel.ForEach(chunks, chunk =>
+            //{
+            //    RenderChunk(chunk.start, chunk.end, pixels, stride);
+            //});
 
-                    ++count;
-                }
-            }
+            RenderChunk(new Point(0, 0), new Point(Buffer.Width, Buffer.Height), pixels, stride);
 
-            Callback?.Invoke(100);
-            mStopRender = false;
+            // Copy back into bitmap
+            System.Runtime.InteropServices.Marshal.Copy(pixels, 0, ptr, pixels.Length);
+            Buffer.UnlockBits(bmpData);
+
+            // 100% progress
+            //CallbackProgress?.Invoke(100);
         }
 
+        private void RenderChunk(Point start, Point end, byte[] pixels, int stride)
+        {
+            if (Buffer == null)
+                return;
+
+            // Compute width and height
+            int width = end.X - start.X;
+            int height = end.Y - start.Y;
+
+            PixelIterator iter = new PixelIterator(start, end, TraversalOrder);
+
+            //  TBD: Compute this only once, not for every thread
+            Matrix4 i2v = imageToViewportTransform(Buffer.Width, Buffer.Height, Camera);
+
+            while (!iter.Done())
+            {
+                Vector mapped = i2v.Multiply(new Vector(iter.Cursor.X, iter.Cursor.Y, 0));
+                Vector dir = mapped - Camera.Eye;
+                dir.Normalize();
+                Ray ray = new Ray(Camera.Eye, dir);
+
+                Color c = trace(ray, 1);
+
+                // Write into pixel array (thread-safe)
+                int index = iter.Cursor.Y * stride + iter.Cursor.X * 4;
+                pixels[index + 0] = (byte)(c.b * 255);
+                pixels[index + 1] = (byte)(c.g * 255);
+                pixels[index + 2] = (byte)(c.r * 255);
+                pixels[index + 3] = 255; // full opacity
+
+                // Thread-safe progress update
+                //int plotted = Interlocked.Increment(ref _plottedPixels);
+                //int percent = (int)((plotted / (double)PixelsToPlotCount) * 100);
+
+                //  Advance iterator
+                iter.Step();
+            }
+        }
     }
 }

@@ -146,10 +146,11 @@ namespace Unilight
 
         private void LoadItemsList()
         {
-            for (int idx = 0; idx < mScene.CountObjects(); idx++)
+            for (int idx = 0; idx < mScene.ObjectCount; idx++)
             {
                 var item = mScene.GetObjectAt(idx);
-                lstItems.Items.Add(item.Name);
+                if (item != null)
+                    lstItems.Items.Add(item.Name);
             }
         }
 

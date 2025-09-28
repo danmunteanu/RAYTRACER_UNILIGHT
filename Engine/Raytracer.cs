@@ -68,10 +68,11 @@ namespace Unilight
             float dist = float.MaxValue;
             Vector3D intersectionPoint = new();
 
-            for (int k = 0; k < Scene.CountObjects(); ++k)
+            for (int k = 0; k < Scene.ObjectCount; ++k)
             {
-                GObject gObject = Scene.GetObjectAt(k);
-                if (!gObject.Enabled) continue;
+                GObject? gObject = Scene.GetObjectAt(k);
+                if (gObject == null || !gObject.Enabled) 
+                    continue;
 
                 gObject.Accept(mIntersector);
 
@@ -100,10 +101,11 @@ namespace Unilight
                 Vector3D r; // reflected ray
                 Vector3D l; // light vector
 
-                for (int k = 0; k < Scene.CountLights(); ++k)
+                for (int k = 0; k < Scene.LightCount; ++k)
                 {
-                    PointLight light = Scene.GetLightAt(k);
-                    if (!light.isEnabled()) continue;
+                    PointLight? light = Scene.GetLightAt(k);
+                    if (light == null || !light.isEnabled()) 
+                        continue;
 
                     l = light.getPosition() - intersectionPoint;
                     l.Normalize();

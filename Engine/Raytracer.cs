@@ -145,32 +145,39 @@ namespace Unilight
             float width = Camera.ViewportWidth;
             float height = Camera.ViewportHeight;
 
+            // If any dimension is zero, return identity
             if (imageWidth == 0 || imageHeight == 0 || width == 0 || height == 0)
             {
-                result = Matrix4.identity();
+                Matrix4.LoadIdentity(out result);
                 return;
             }
 
-            Matrix4 finalTransform = Matrix4.translate(Camera.LookAt.X, Camera.LookAt.Y, Camera.LookAt.Z);
+            // Step 1: Translation to camera LookAt
+            Matrix4 finalTransform;
+            Matrix4.LoadTranslate(Camera.LookAt.X, Camera.LookAt.Y, Camera.LookAt.Z, out finalTransform);
 
-            Vector3D invNormal = Camera.Eye - Camera.LookAt;
-            invNormal.Normalize();
-
-            Matrix4 scale = Matrix4.identity();
+            // Step 2: Scale viewport to image dimensions
+            Matrix4 scale;
+            Matrix4.LoadIdentity(out scale);
             scale.SetAt(0, 0, width / imageWidth);
             scale.SetAt(1, 1, height / imageHeight);
             finalTransform.MultiplyThisBy(scale);
 
-            Matrix4 mirror = Matrix4.identity();
+            // Step 3: Mirror Y axis
+            Matrix4 mirror;
+            Matrix4.LoadIdentity(out mirror);
             mirror.SetAt(1, 1, -1);
             finalTransform.MultiplyThisBy(mirror);
 
-            Matrix4 center = Matrix4.translate(-imageWidth / 2, -imageHeight / 2, 0);
+            // Step 4: Center the image
+            Matrix4 center;
+            Matrix4.LoadTranslate(-imageWidth / 2f, -imageHeight / 2f, 0f, out center);
             finalTransform.MultiplyThisBy(center);
 
-            // assign to out parameter
+            // Output the final transform
             result = finalTransform;
         }
+
 
         public void Render()
         {
@@ -226,7 +233,7 @@ namespace Unilight
 
             while (!iter.Done())
             {
-                Vector3D mapped = _imageToWorld.Multiply(new Vector3D(iter.Cursor.X, iter.Cursor.Y, 0));
+                Vector3D mapped = _imageToWorld.MultiplyBy(new Vector3D(iter.Cursor.X, iter.Cursor.Y, 0));
                 Vector3D dir = mapped - Camera.Eye;
                 dir.Normalize();
                 Ray ray = new Ray(Camera.Eye, dir);

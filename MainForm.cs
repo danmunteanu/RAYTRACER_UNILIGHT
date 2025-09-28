@@ -45,11 +45,15 @@ namespace Unilight
 
         public void UpdateRenderProgress(int percent)
         {
-            System.Windows.Forms.MethodInvoker? m = new(() => progressRender.Value = percent);
-            progressRender.Invoke(m);
+            if (progressRender.InvokeRequired)
+            {
+                progressRender.Invoke(new MethodInvoker(() => progressRender.Value = percent));
+            }
+            else
+            {
+                progressRender.Value = percent;
+            }
         }
-
-        
 
         private void BuildScene()
         {
@@ -60,7 +64,7 @@ namespace Unilight
             s1.Material.Color = RgbColor.Blue;
             s1.Material.Gloss = 30;
             s1.Material.Specular = 1.0f;
-            s1.Material.Reflection = 1.0f;
+            s1.Material.Reflection = 0.3f;
             s1.Radius = 2.5f;
             s1.Enabled = true;
             mScene.AddObject(s1);

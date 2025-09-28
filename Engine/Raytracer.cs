@@ -11,6 +11,9 @@ namespace Unilight
 
         public delegate void UpdateCallback(int percent);
 
+        //  Callback for update
+        public UpdateCallback? Callback { get; set; } = null;
+
         private struct RayTraversalResult
         {
             public GObject? Closest { get; set; }
@@ -18,8 +21,6 @@ namespace Unilight
             public Vector3D? IntersectionPoint { get; set; }
         }
 
-        //  Callback for update
-        public UpdateCallback? Callback { get; set; } = null;
 
         //  Pixel traversal order
         public TraversalOrder TraversalOrder { get; set; }
@@ -49,8 +50,13 @@ namespace Unilight
         //  Each thread gets its own Intersector instance
         private ThreadLocal<Intersector> _intersector = new(() => new Intersector());
 
+        private int _plottedPixels = 0;
+
         //  Counts how many pixels we have to trace
         private int _pixelsToPlotCount = 0;
+
+        private int _lastReportedPercent = 0;
+
 
         public Raytracer() 
         { 
@@ -218,7 +224,10 @@ namespace Unilight
             int stride = bmpData.Stride;
             byte[] pixels = new byte[stride * Buffer.Height];
 
+            _plottedPixels = 0;
             _pixelsToPlotCount = Buffer.Width * Buffer.Height;
+            _lastReportedPercent = 0;
+            Callback?.Invoke(0);
 
             // Render all chunks in parallel
             Parallel.ForEach(chunks, chunk =>
@@ -231,7 +240,7 @@ namespace Unilight
             Buffer.UnlockBits(bmpData);
 
             // 100% progress
-            //CallbackProgress?.Invoke(100);
+            Callback?.Invoke(100);
         }
 
         private void RenderChunk(Point start, Point end, byte[] pixels, int stride)
@@ -262,9 +271,18 @@ namespace Unilight
                 pixels[index + 2] = (byte)(c.R * 255);
                 pixels[index + 3] = 255; // full opacity
 
-                // Thread-safe progress update
-                //int plotted = Interlocked.Increment(ref _plottedPixels);
-                //int percent = (int)((plotted / (double)PixelsToPlotCount) * 100);
+                // Increment pixel counter atomically
+                int plotted = Interlocked.Increment(ref _plottedPixels);
+
+                // Calculate progress
+                int percent = (int)((plotted / (double)_pixelsToPlotCount) * 100);
+
+                // Only report if crossed the next 5% threshold
+                if (percent / 5 > _lastReportedPercent / 5)
+                {
+                    _lastReportedPercent = percent;
+                    Callback?.Invoke(percent);
+                }
 
                 //  Advance iterator
                 iter.Step();

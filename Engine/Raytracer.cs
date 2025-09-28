@@ -19,6 +19,8 @@ namespace Unilight
             public Vector3D? IntersectionPoint { get; set; }
         }
 
+        private ThreadLocal<Intersector> _intersector = new(() => new Intersector());
+
         public delegate void UpdateCallback(int percent);
 
         public UpdateCallback? Callback { get; set; } = null;
@@ -30,8 +32,6 @@ namespace Unilight
         //  Reference to the Bitmap we're drawing to
         public Bitmap? Buffer { get; set; } = null;
 
-        private Intersector mIntersector = new Intersector();
-
         private Matrix4? _imageToWorld = null;
 
         public bool GlobalReflection { get; set; } = true;
@@ -41,6 +41,8 @@ namespace Unilight
         public bool ComputeFog { get; set; } = false;
 
         public int TraceDepth { get; set; } = DEFAULT_TRACE_DEPTH;
+
+        private int _pixelsToPlotCount = 0;
 
         public Raytracer() 
         { 
@@ -59,10 +61,11 @@ namespace Unilight
 
         private RgbColor trace(Ray ray, int depth)
         {
-            if (Scene == null) 
+            if (Scene == null || _intersector.Value == null) 
                 return RgbColor.Black;
 
-            mIntersector.Ray = ray;
+            Intersector intersector = _intersector.Value;
+            intersector.Ray = ray;
 
             GObject? closest = null;
             float dist = float.MaxValue;
@@ -74,21 +77,21 @@ namespace Unilight
                 if (gObject == null || !gObject.Enabled) 
                     continue;
 
-                gObject.Accept(mIntersector);
+                gObject.Accept(intersector);
 
-                if (mIntersector.Result == Intersector.IntersectionResult.Hit &&
-                    dist > mIntersector.Distance)
+                if (intersector.Result == Intersector.IntersectionResult.Hit &&
+                    dist > intersector.Distance)
                 {
-                    dist = mIntersector.Distance;
+                    dist = intersector.Distance;
                     closest = gObject;
-                    intersectionPoint = mIntersector.IntersectionPoint;
+                    intersectionPoint = intersector.IntersectionPoint;
                     break;
                 }
             }
 
             RgbColor lit = RgbColor.Black;
 
-            if (closest != null && mIntersector.Result == Intersector.IntersectionResult.Hit)
+            if (closest != null && intersector.Result == Intersector.IntersectionResult.Hit)
             {
                 Vector3D n = closest.GetNormalAt(intersectionPoint);
                 n.Normalize();
@@ -180,20 +183,20 @@ namespace Unilight
             result = finalTransform;
         }
 
-
         public void Render()
         {
             if (Buffer == null)
                 return;
 
-            //  Compute image to world transform
+            //  Compute image to world transform once
             ComputeImageToViewportTransform(Buffer.Width, Buffer.Height, out _imageToWorld);
 
+            //  Split render area in multiple chunks, depending on processor count
             List<(Point start, Point end)>? chunks = null;
             Chunks.CreateRenderChunks(Buffer.Width, Buffer.Height, out chunks);
 
-            if (chunks == null)
-                return;
+            //  Something went wrong with chunking
+            if (chunks == null) return;
 
             // Lock the bitmap once
             var rect = new Rectangle(0, 0, Buffer.Width, Buffer.Height);
@@ -204,15 +207,13 @@ namespace Unilight
             byte[] pixels = new byte[stride * Buffer.Height];
 
             //_plottedPixels = 0;
-            //PixelsToPlotCount = Buffer.Width * Buffer.Height;
+            _pixelsToPlotCount = Buffer.Width * Buffer.Height;
 
             // Render all chunks in parallel
             Parallel.ForEach(chunks, chunk =>
             {
                 RenderChunk(chunk.start, chunk.end, pixels, stride);
             });
-
-            RenderChunk(new Point(0, 0), new Point(Buffer.Width, Buffer.Height), pixels, stride);
 
             // Copy back into bitmap
             System.Runtime.InteropServices.Marshal.Copy(pixels, 0, ptr, pixels.Length);
@@ -224,7 +225,7 @@ namespace Unilight
 
         private void RenderChunk(Point start, Point end, byte[] pixels, int stride)
         {
-            if (Buffer == null)
+            if (Buffer == null || _imageToWorld == null)
                 return;
 
             // Compute width and height
@@ -237,6 +238,7 @@ namespace Unilight
             {
                 Vector3D mapped = _imageToWorld.MultiplyBy(new Vector3D(iter.Cursor.X, iter.Cursor.Y, 0));
                 Vector3D dir = mapped - Camera.Eye;
+
                 dir.Normalize();
                 Ray ray = new Ray(Camera.Eye, dir);
 

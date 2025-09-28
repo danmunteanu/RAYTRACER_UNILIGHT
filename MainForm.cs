@@ -19,23 +19,25 @@ namespace Unilight
             public float height = 0;
         }
 
-        private Bitmap? mBuffer = null;
+        private Bitmap? _buffer = null;
 
         //  stores created editors
-        private EditorCache mCache = new();
+        private EditorCache _editorCache = new();
 
-        private Scene mScene = new Scene();
-        private Raytracer mRaytracer = new Raytracer();
+        private Scene _scene = new Scene();
+        private Raytracer _raytracer = new Raytracer();
+
+        private SettingsForm _settingsForm;
 
         public async Task Render()
         {
             await Task.Run(() =>
-            {                
-                mRaytracer.Render();
+            {
+                _raytracer.Render();
 
                 pictureRender.BeginInvoke((System.Windows.Forms.MethodInvoker)(() =>
                 {
-                    pictureRender.Image = mBuffer;
+                    pictureRender.Image = _buffer;
                     pictureRender.Refresh();
                 }));
                 btnRender.BeginInvoke((System.Windows.Forms.MethodInvoker)(() => btnRender.Enabled = true));
@@ -57,7 +59,7 @@ namespace Unilight
 
         private void BuildScene()
         {
-            mScene = new Scene();
+            _scene = new Scene();
 
             Sphere s1 = new Sphere();
             s1.Origin = new Vector3D(-3.5f, 0, 0);
@@ -67,7 +69,7 @@ namespace Unilight
             s1.Material.Reflection = 0.3f;
             s1.Radius = 2.5f;
             s1.Enabled = true;
-            mScene.AddObject(s1);
+            _scene.AddObject(s1);
 
             Sphere s2 = new Sphere();
             s2.Origin = new Vector3D(3, 0, 0);
@@ -78,7 +80,7 @@ namespace Unilight
             s2.Radius = 1;
             s2.Name = "Red Sphere";
             s2.Enabled = true;
-            mScene.AddObject(s2);
+            _scene.AddObject(s2);
 
             Sphere s3 = new Sphere();
             s3.Origin = new Vector3D(0, 0, 0);
@@ -88,11 +90,11 @@ namespace Unilight
             s3.Material.Reflection = 0;
             s3.Radius = 0.55f;
             s3.Enabled = true;
-            mScene.AddObject(s3);
+            _scene.AddObject(s3);
 
             Plane pln = new();
             pln.Material.Color = RgbColor.Yellow;
-            mScene.AddObject(pln);
+            _scene.AddObject(pln);
 
             PointLight p = new PointLight();
             p.setPosition(new Vector3D(0, 15, 35));
@@ -100,7 +102,7 @@ namespace Unilight
             p.setName("Point Light");
             p.setEnabled(true);
 
-            mScene.AddLight(p);
+            _scene.AddLight(p);
         }
 
         public MainForm()
@@ -111,7 +113,7 @@ namespace Unilight
 
             RegisterEditors();
 
-            mBuffer = new(800, 600);
+            _buffer = new(800, 600);
 
             //  setup camera
             Camera cam = new()
@@ -123,16 +125,16 @@ namespace Unilight
             };
 
             //  setup raytracer
-            mRaytracer.Scene = mScene;
-            mRaytracer.Callback = UpdateRenderProgress;
-            mRaytracer.Camera = cam;
-            mRaytracer.Buffer = mBuffer;
-            mRaytracer.GlobalReflectionEnabled = true;
-            mRaytracer.ComputeFogEnabled = false;
-            mRaytracer.ComputeAmbientEnabled = true;
-            mRaytracer.ComputeSpecularEnabled = true;
-            mRaytracer.ComputeDiffuseEnabled = true;
-            mRaytracer.TraceDepth = 5;
+            _raytracer.Scene = _scene;
+            _raytracer.Callback = UpdateRenderProgress;
+            _raytracer.Camera = cam;
+            _raytracer.Buffer = _buffer;
+            _raytracer.GlobalReflectionEnabled = true;
+            _raytracer.ComputeFogEnabled = false;
+            _raytracer.ComputeAmbientEnabled = true;
+            _raytracer.ComputeSpecularEnabled = true;
+            _raytracer.ComputeDiffuseEnabled = true;
+            _raytracer.TraceDepth = 5;
 
             LoadItemsList();
 
@@ -150,9 +152,9 @@ namespace Unilight
 
         private void LoadItemsList()
         {
-            for (int idx = 0; idx < mScene.ObjectCount; idx++)
+            for (int idx = 0; idx < _scene.ObjectCount; idx++)
             {
-                var item = mScene.GetObjectAt(idx);
+                var item = _scene.GetObjectAt(idx);
                 if (item != null)
                     lstItems.Items.Add(item.Name);
             }
@@ -160,27 +162,27 @@ namespace Unilight
 
         private void btnNewScene_Click(object sender, EventArgs e)
         {
-            mScene.ClearLights();
-            mScene.ClearObjects();
+            _scene.ClearLights();
+            _scene.ClearObjects();
         }
 
         private void btnCloseScene_Click(object sender, EventArgs e)
         {
-            mScene.ClearLights();
-            mScene.ClearObjects();
+            _scene.ClearLights();
+            _scene.ClearObjects();
         }
 
         public SettingsInfo LoadSettings()
         {
             SettingsInfo info = new SettingsInfo();
-            info.globalReflection = mRaytracer.GlobalReflectionEnabled;
-            info.computeSpecular = mRaytracer.ComputeSpecularEnabled;
-            info.computeDiffuse = mRaytracer.ComputeDiffuseEnabled;
-            info.computeAmbient = mRaytracer.ComputeAmbientEnabled;
-            info.computeFog = mRaytracer.ComputeFogEnabled;
-            info.depth = mRaytracer.TraceDepth;
+            info.globalReflection = _raytracer.GlobalReflectionEnabled;
+            info.computeSpecular = _raytracer.ComputeSpecularEnabled;
+            info.computeDiffuse = _raytracer.ComputeDiffuseEnabled;
+            info.computeAmbient = _raytracer.ComputeAmbientEnabled;
+            info.computeFog = _raytracer.ComputeFogEnabled;
+            info.depth = _raytracer.TraceDepth;
 
-            Camera cam = mRaytracer.Camera;
+            Camera cam = _raytracer.Camera;
             info.eye = cam.Eye;
             info.lookAt = cam.LookAt;
             info.width = cam.ViewportWidth;
@@ -190,14 +192,14 @@ namespace Unilight
 
         public void UpdateSettings(SettingsInfo info)
         {
-            mRaytracer.TraceDepth = info.depth;
-            mRaytracer.ComputeAmbientEnabled = info.globalReflection;
-            mRaytracer.ComputeAmbientEnabled = info.computeSpecular;
-            mRaytracer.ComputeAmbientEnabled = info.computeDiffuse;
-            mRaytracer.ComputeAmbientEnabled = info.computeAmbient;
-            mRaytracer.ComputeAmbientEnabled = info.computeFog;
+            _raytracer.TraceDepth = info.depth;
+            _raytracer.ComputeAmbientEnabled = info.globalReflection;
+            _raytracer.ComputeAmbientEnabled = info.computeSpecular;
+            _raytracer.ComputeAmbientEnabled = info.computeDiffuse;
+            _raytracer.ComputeAmbientEnabled = info.computeAmbient;
+            _raytracer.ComputeAmbientEnabled = info.computeFog;
 
-            Camera cam = mRaytracer.Camera;
+            Camera cam = _raytracer.Camera;
             cam.Eye = info.eye;
             cam.LookAt = info.lookAt;
             cam.ViewportWidth = info.width;
@@ -219,7 +221,7 @@ namespace Unilight
                 return;
             }
 
-            var item = mScene.GetObjectAt(lstItems.SelectedIndex);
+            var item = _scene.GetObjectAt(lstItems.SelectedIndex);
             if (item == null)
                 return;
 
@@ -228,7 +230,7 @@ namespace Unilight
             editorGObject.Enabled = true;
 
             //  load specific editor
-            var editor = mCache.FindOrCreateEditor(item.GetType().Name);
+            var editor = _editorCache.FindOrCreateEditor(item.GetType().Name);
             if (editor != null)
             {
                 editor.LoadState(item);
@@ -259,12 +261,12 @@ namespace Unilight
             if (lstItems.SelectedIndex == -1)
                 return;
 
-            var item = mScene.GetObjectAt(lstItems.SelectedIndex);
+            var item = _scene.GetObjectAt(lstItems.SelectedIndex);
             if (item == null)
                 return;
 
             editorGObject.SaveState(item);
-            var editor = mCache.FindOrCreateEditor(item.GetType().Name);
+            var editor = _editorCache.FindOrCreateEditor(item.GetType().Name);
             if (editor != null)
             {
                 editor.SaveState(item);
@@ -273,9 +275,25 @@ namespace Unilight
             lstItems.Items[lstItems.SelectedIndex] = item.Name;
         }
 
+        private void OnShowSettings()
+        {
+            if (_settingsForm == null)
+                _settingsForm = new()
+                {
+                    Raytracer = _raytracer
+                };
+
+            _settingsForm.ShowDialog(this);
+        }
+
         private void btnUpdate_Click(object sender, EventArgs e)
         {
             OnUpdate();
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            OnShowSettings();
         }
     }
 }

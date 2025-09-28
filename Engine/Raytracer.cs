@@ -26,20 +26,22 @@ namespace UnilightRaytracer
 
         public UpdateCallback? Callback { get; set; } = null;
         
-        //  The buffer we're rendering to
+        public Camera Camera { get; set; } = new Camera();
+        
+        public Scene? Scene { get; set; } = null;
+        
+        //  Reference to the Bitmap we're drawing to
         public Bitmap? Buffer { get; set; } = null;
 
-        public Scene? Scene { get; set; } = null;
-        private Camera mCamera = new Camera();
         private Intersector mIntersector = new Intersector();
 
-        public int TraceDepth { get; set; } = DEFAULT_TRACE_DEPTH;
-
-        public bool ApplyGlobalReflection { get; set; } = true;
+        public bool GlobalReflection { get; set; } = true;
         public bool ComputeSpecular { get; set; } = false;
         public bool ComputeDiffuse { get; set; } = false;
         public bool ComputeAmbient { get; set; } = false;
         public bool ComputeFog { get; set; } = false;
+
+        public int TraceDepth { get; set; } = DEFAULT_TRACE_DEPTH;
 
         private bool mStopRender = false;
 
@@ -125,7 +127,7 @@ namespace UnilightRaytracer
                         lit = lit.Add(diff);
                     }
 
-                    if (ApplyGlobalReflection && refl > 0 && depth < TraceDepth)
+                    if (GlobalReflection && refl > 0 && depth < TraceDepth)
                     {
                         Ray reflected = new Ray(intersectionPoint, r);
                         Color acc = trace(reflected, depth + 1);
@@ -178,7 +180,7 @@ namespace UnilightRaytracer
             int lastPercent = 0;
             long count = 0;
 
-            Matrix4 i2v = imageToViewportTransform(imgWidth, imgHeight, mCamera);
+            Matrix4 i2v = imageToViewportTransform(imgWidth, imgHeight, Camera);
             
             for (int p = 0; !mStopRender && p < imgWidth; ++p)
             {
@@ -189,9 +191,9 @@ namespace UnilightRaytracer
                     lastPercent = percent;
 
                     Vector mapped = i2v.Multiply(new Vector(p, q, 0));
-                    Vector dir = mapped - mCamera.Eye;
+                    Vector dir = mapped - Camera.Eye;
                     dir.Normalize();
-                    Ray ray = new Ray(mCamera.Eye, dir);
+                    Ray ray = new Ray(Camera.Eye, dir);
 
                     Color c = trace(ray, 1);
 
@@ -209,8 +211,5 @@ namespace UnilightRaytracer
             mStopRender = false;
         }
 
-        public Camera getCamera() => mCamera;
-
-        public void setCamera(Camera camera) => mCamera = camera;
     }
 }

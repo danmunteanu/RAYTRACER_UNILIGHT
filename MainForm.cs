@@ -122,9 +122,9 @@ namespace UnilightRaytracer
             //  setup raytracer
             mRaytracer.Scene = mScene;
             mRaytracer.Callback = UpdateRenderProgress;
-            mRaytracer.setCamera(cam);
+            mRaytracer.Camera = cam;
             mRaytracer.Buffer = mBuffer;
-            mRaytracer.ApplyGlobalReflection = true;
+            mRaytracer.GlobalReflection = true;
             mRaytracer.ComputeFog = false;
             mRaytracer.ComputeAmbient = true;
             mRaytracer.ComputeSpecular = true;
@@ -169,14 +169,14 @@ namespace UnilightRaytracer
         public SettingsInfo LoadSettings()
         {
             SettingsInfo info = new SettingsInfo();
-            info.globalReflection = mRaytracer.ApplyGlobalReflection;
+            info.globalReflection = mRaytracer.GlobalReflection;
             info.computeSpecular = mRaytracer.ComputeSpecular;
             info.computeDiffuse = mRaytracer.ComputeDiffuse;
             info.computeAmbient = mRaytracer.ComputeAmbient;
             info.computeFog = mRaytracer.ComputeFog;
             info.depth = mRaytracer.TraceDepth;
 
-            Camera cam = mRaytracer.getCamera();
+            Camera cam = mRaytracer.Camera;
             info.eye = cam.Eye;
             info.lookAt = cam.LookAt;
             info.width = cam.ViewportWidth;
@@ -193,7 +193,7 @@ namespace UnilightRaytracer
             mRaytracer.ComputeAmbient = info.computeAmbient;
             mRaytracer.ComputeAmbient = info.computeFog;
 
-            Camera cam = mRaytracer.getCamera();
+            Camera cam = mRaytracer.Camera;
             cam.Eye = info.eye;
             cam.LookAt = info.lookAt;
             cam.ViewportWidth = info.width;

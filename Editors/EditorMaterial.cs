@@ -52,8 +52,8 @@ namespace Unilight.Editors
             // take color from panel and store back into Material.Color
             var c = panelColor.BackColor;
             obj.Material.Color.R = c.R / 255f;
-            obj.Material.Color.R = c.G / 255f;
-            obj.Material.Color.R = c.B / 255f;
+            obj.Material.Color.G = c.G / 255f;
+            obj.Material.Color.B = c.B / 255f;
 
             // save numeric values back into material
             obj.Material.Gloss = (float)numGloss.Value;

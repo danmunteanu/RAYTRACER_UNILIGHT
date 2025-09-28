@@ -21,7 +21,6 @@ namespace Unilight
             public Vector3D? IntersectionPoint { get; set; }
         }
 
-
         //  Pixel traversal order
         public TraversalOrder TraversalOrder { get; set; }
         

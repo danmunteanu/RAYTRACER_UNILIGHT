@@ -210,8 +210,8 @@
             tableLayoutItems.RowCount = 5;
             tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Absolute, 42F));
             tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Absolute, 400F));
-            tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Absolute, 108F));
+            tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Absolute, 334F));
+            tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Absolute, 174F));
             tableLayoutItems.RowStyles.Add(new RowStyle(SizeType.Absolute, 58F));
             tableLayoutItems.Size = new Size(398, 834);
             tableLayoutItems.TabIndex = 10;
@@ -271,10 +271,10 @@
             // panelEditor
             // 
             panelEditor.Dock = DockStyle.Fill;
-            panelEditor.Location = new Point(4, 673);
+            panelEditor.Location = new Point(4, 607);
             panelEditor.Margin = new Padding(4, 5, 4, 5);
             panelEditor.Name = "panelEditor";
-            panelEditor.Size = new Size(390, 98);
+            panelEditor.Size = new Size(390, 164);
             panelEditor.TabIndex = 7;
             // 
             // editorGObject
@@ -283,7 +283,7 @@
             editorGObject.Location = new Point(6, 276);
             editorGObject.Margin = new Padding(6, 8, 6, 8);
             editorGObject.Name = "editorGObject";
-            editorGObject.Size = new Size(386, 384);
+            editorGObject.Size = new Size(386, 318);
             editorGObject.TabIndex = 8;
             // 
             // lblObjects

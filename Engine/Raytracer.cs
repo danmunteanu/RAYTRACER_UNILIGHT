@@ -5,11 +5,6 @@ namespace Unilight
     //  1st = Origin, 2nd = Direction
     using Ray = Tuple<Vector3D, Vector3D>;
 
-    using IntPair = Tuple<int, int>;
-
-    //  Eye, LookAt, ViewportWidth, ViewportHeight
-    using TCamera = Tuple<Vector3D, Vector3D, float, float>;
-
     public class Raytracer
     {
         private static int DEFAULT_TRACE_DEPTH = 5;
@@ -37,6 +32,8 @@ namespace Unilight
 
         private Intersector mIntersector = new Intersector();
 
+        private Matrix4? _imageToWorld = null;
+
         public bool GlobalReflection { get; set; } = true;
         public bool ComputeSpecular { get; set; } = false;
         public bool ComputeDiffuse { get; set; } = false;
@@ -45,7 +42,9 @@ namespace Unilight
 
         public int TraceDepth { get; set; } = DEFAULT_TRACE_DEPTH;
 
-        public Raytracer() { }
+        public Raytracer() 
+        { 
+        }
 
         private RgbColor computeSpecular(float vDotR, float mGls, RgbColor sourceSpec, float matSpec)
         {
@@ -141,37 +140,45 @@ namespace Unilight
             return lit;
         }
 
-        private Matrix4 imageToViewportTransform(int imgWidth, int imgHeight, Camera cam)
+        private void ComputeImageToViewportTransform(int imageWidth, int imageHeight, out Matrix4 result)
         {
-            float width = cam.ViewportWidth;
-            float height = cam.ViewportHeight;
-            if (imgWidth == 0 || imgHeight == 0 || width == 0 || height == 0)
-                return Matrix4.identity();
+            float width = Camera.ViewportWidth;
+            float height = Camera.ViewportHeight;
 
-            Matrix4 finalTransform = Matrix4.translate(cam.LookAt.X, cam.LookAt.Y, cam.LookAt.Z);
+            if (imageWidth == 0 || imageHeight == 0 || width == 0 || height == 0)
+            {
+                result = Matrix4.identity();
+                return;
+            }
 
-            Vector3D invNormal = cam.Eye - cam.LookAt;
+            Matrix4 finalTransform = Matrix4.translate(Camera.LookAt.X, Camera.LookAt.Y, Camera.LookAt.Z);
+
+            Vector3D invNormal = Camera.Eye - Camera.LookAt;
             invNormal.Normalize();
 
             Matrix4 scale = Matrix4.identity();
-            scale.SetAt(0, 0, width / imgWidth);
-            scale.SetAt(1, 1, height / imgHeight);
+            scale.SetAt(0, 0, width / imageWidth);
+            scale.SetAt(1, 1, height / imageHeight);
             finalTransform.MultiplyThisBy(scale);
 
             Matrix4 mirror = Matrix4.identity();
             mirror.SetAt(1, 1, -1);
             finalTransform.MultiplyThisBy(mirror);
 
-            Matrix4 center = Matrix4.translate(-imgWidth / 2, -imgHeight / 2, 0);
+            Matrix4 center = Matrix4.translate(-imageWidth / 2, -imageHeight / 2, 0);
             finalTransform.MultiplyThisBy(center);
 
-            return finalTransform;
+            // assign to out parameter
+            result = finalTransform;
         }
 
         public void Render()
         {
             if (Buffer == null)
                 return;
+
+            //  Compute image to world transform
+            ComputeImageToViewportTransform(Buffer.Width, Buffer.Height, out _imageToWorld);
 
             List<(Point start, Point end)>? chunks = null;
             Chunks.CreateRenderChunks(Buffer.Width, Buffer.Height, out chunks);
@@ -191,10 +198,10 @@ namespace Unilight
             //PixelsToPlotCount = Buffer.Width * Buffer.Height;
 
             // Render all chunks in parallel
-            //Parallel.ForEach(chunks, chunk =>
-            //{
-            //    RenderChunk(chunk.start, chunk.end, pixels, stride);
-            //});
+            Parallel.ForEach(chunks, chunk =>
+            {
+                RenderChunk(chunk.start, chunk.end, pixels, stride);
+            });
 
             RenderChunk(new Point(0, 0), new Point(Buffer.Width, Buffer.Height), pixels, stride);
 
@@ -217,12 +224,9 @@ namespace Unilight
 
             PixelIterator iter = new PixelIterator(start, end, TraversalOrder);
 
-            //  TBD: Compute this only once, not for every thread
-            Matrix4 i2v = imageToViewportTransform(Buffer.Width, Buffer.Height, Camera);
-
             while (!iter.Done())
             {
-                Vector3D mapped = i2v.Multiply(new Vector3D(iter.Cursor.X, iter.Cursor.Y, 0));
+                Vector3D mapped = _imageToWorld.Multiply(new Vector3D(iter.Cursor.X, iter.Cursor.Y, 0));
                 Vector3D dir = mapped - Camera.Eye;
                 dir.Normalize();
                 Ray ray = new Ray(Camera.Eye, dir);

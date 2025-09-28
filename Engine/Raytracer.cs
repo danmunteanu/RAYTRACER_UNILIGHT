@@ -25,9 +25,11 @@ namespace UnilightRaytracer
         public delegate void UpdateCallback(int percent);
 
         public UpdateCallback? Callback { get; set; } = null;
+        
+        //  The buffer we're rendering to
+        public Bitmap? Buffer { get; set; } = null;
 
         public Scene? Scene { get; set; } = null;
-        private ObservableImage? mObservableImage = null;
         private Camera mCamera = new Camera();
         private Intersector mIntersector = new Intersector();
 
@@ -164,10 +166,11 @@ namespace UnilightRaytracer
 
         public void Render()
         {
-            if (mObservableImage == null) return;
+            if (Buffer == null)
+                return;
 
-            int imgWidth = mObservableImage.Width;
-            int imgHeight = mObservableImage.Height;
+            int imgWidth = Buffer.Width;
+            int imgHeight = Buffer.Height;
             long total = imgWidth * imgHeight;
             if (total <= 0) return;
 
@@ -176,8 +179,7 @@ namespace UnilightRaytracer
             long count = 0;
 
             Matrix4 i2v = imageToViewportTransform(imgWidth, imgHeight, mCamera);
-            mObservableImage.Clear();
-
+            
             for (int p = 0; !mStopRender && p < imgWidth; ++p)
             {
                 for (int q = 0; !mStopRender && q < imgHeight; ++q)
@@ -192,7 +194,12 @@ namespace UnilightRaytracer
                     Ray ray = new Ray(mCamera.Eye, dir);
 
                     Color c = trace(ray, 1);
-                    mObservableImage.SetRGB(p, q, c);
+
+                    Buffer.SetPixel(p, q, System.Drawing.Color.FromArgb(
+                        (int)Math.Round(c.r * 255),
+                        (int)Math.Round(c.g * 255),
+                        (int)Math.Round(c.b * 255)
+                    ));
 
                     ++count;
                 }
@@ -202,8 +209,8 @@ namespace UnilightRaytracer
             mStopRender = false;
         }
 
-        public void setImage(ObservableImage img) => mObservableImage = img;
         public Camera getCamera() => mCamera;
+
         public void setCamera(Camera camera) => mCamera = camera;
     }
 }

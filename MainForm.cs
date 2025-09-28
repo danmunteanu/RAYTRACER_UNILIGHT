@@ -20,6 +20,8 @@ namespace UnilightRaytracer
             public float height = 0;
         }
 
+        private Bitmap? mBuffer = null;
+
         //  stores created editors
         private EditorCache mCache = new();
 
@@ -29,11 +31,14 @@ namespace UnilightRaytracer
         public async Task Render()
         {
             await Task.Run(() =>
-            {
-                mImage.Clear(Color.black);
+            {                
                 mRaytracer.Render();
-                pictureRender.Image = mImage.GetBitmap();
 
+                pictureRender.BeginInvoke((System.Windows.Forms.MethodInvoker)(() =>
+                {
+                    pictureRender.Image = mBuffer;
+                    pictureRender.Refresh();
+                }));
                 btnRender.BeginInvoke((System.Windows.Forms.MethodInvoker)(() => btnRender.Enabled = true));
 
             });
@@ -45,7 +50,7 @@ namespace UnilightRaytracer
             progressRender.Invoke(m);
         }
 
-        private ObservableImage mImage = new(800, 600);
+        
 
         private void BuildScene()
         {
@@ -103,11 +108,7 @@ namespace UnilightRaytracer
 
             RegisterEditors();
 
-            //  Trigger Double Buffering
-            /*typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty
-            | BindingFlags.Instance | BindingFlags.NonPublic, null,
-            panelRender, new object[] { true });*/
-            //  Storage storage = new SerializationStorage();
+            mBuffer = new(800, 600);
 
             //  setup camera
             Camera cam = new()
@@ -122,7 +123,7 @@ namespace UnilightRaytracer
             mRaytracer.Scene = mScene;
             mRaytracer.Callback = UpdateRenderProgress;
             mRaytracer.setCamera(cam);
-            mRaytracer.setImage(mImage);
+            mRaytracer.Buffer = mBuffer;
             mRaytracer.ApplyGlobalReflection = true;
             mRaytracer.ComputeFog = false;
             mRaytracer.ComputeAmbient = true;
@@ -131,9 +132,6 @@ namespace UnilightRaytracer
             mRaytracer.TraceDepth = 5;
 
             LoadItemsList();
-
-            //  add mainFrame as an observer for the image
-            /*image.getSubject().addObserver(mainFrame);*/
 
             editorGObject.ResetState();
             editorGObject.Enabled = false;

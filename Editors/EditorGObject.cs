@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using UnilightRaytracer;
 using CommonGraphics;
 
-namespace RaytracerUnilight.Editors
+namespace Unilight.Editors
 {
     public partial class EditorGObject : EditorBase
     {

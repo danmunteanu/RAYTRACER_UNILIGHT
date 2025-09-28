@@ -1,5 +1,4 @@
-using RaytracerUnilight.Editors;
-using System.Reflection;
+using Unilight.Editors;
 using CommonGraphics;
 
 namespace UnilightRaytracer

@@ -1,4 +1,4 @@
-﻿namespace RaytracerUnilight.Editors
+﻿namespace Unilight.Editors
 {
     partial class EditorPlane
     {

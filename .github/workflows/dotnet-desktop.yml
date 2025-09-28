@@ -17,9 +17,6 @@ jobs:
     env:
       Solution_Name: RAYTRACER_UNILIGHT.sln
       Project_Name: RAYTRACER_UNILIGHT.csproj
-      CommonRepo_Url: https://github.com/danmunteanu/COMMON_GRAPHICS.git
-      CommonSolution_Name: COMMON_GRAPHICS.sln
-      CommonProject_Name: COMMON_GRAPHICS.csproj
 
     steps:
       # Checkout main repository
@@ -48,33 +45,42 @@ jobs:
 
       # Restore and build COMMON_GRAPHICS
       - name: Restore COMMON_GRAPHICS
-        run: msbuild COMMON_GRAPHICS/$env:CommonSolution_Name /t:Restore /p:Configuration=${{ matrix.configuration }}
+        shell: pwsh
+        run: msbuild "$PWD/COMMON_GRAPHICS/COMMON_GRAPHICS.sln" /t:Restore /p:Configuration=${{ matrix.configuration }}
 
       - name: Build COMMON_GRAPHICS
-        run: msbuild COMMON_GRAPHICS/$env:CommonSolution_Name /p:Configuration=${{ matrix.configuration }}
+        shell: pwsh
+        run: msbuild "$PWD/COMMON_GRAPHICS/COMMON_GRAPHICS.sln" /p:Configuration=${{ matrix.configuration }}
 
       # Copy the compiled DLL into the main project folder
       - name: Copy COMMON_GRAPHICS DLL
+        shell: pwsh
         run: |
-          mkdir -p RAYTRACER_UNILIGHT/libs
-          copy COMMON_GRAPHICS/bin/${{ matrix.configuration }}/net8.0/COMMON_GRAPHICS.dll RAYTRACER_UNILIGHT/libs/
+          $dllSource = "$PWD/COMMON_GRAPHICS/bin/${{ matrix.configuration }}/net8.0/COMMON_GRAPHICS.dll"
+          $dllDestFolder = "$PWD/RAYTRACER_UNILIGHT/libs"
+          if (!(Test-Path $dllDestFolder)) { New-Item -ItemType Directory -Path $dllDestFolder | Out-Null }
+          Copy-Item $dllSource $dllDestFolder
 
       # Restore main project packages
       - name: Restore RAYTRACER_UNILIGHT
-        run: msbuild $env:Solution_Name /t:Restore /p:Configuration=${{ matrix.configuration }}
+        shell: pwsh
+        run: msbuild "$PWD/$env:Solution_Name" /t:Restore /p:Configuration=${{ matrix.configuration }}
 
       # Build main project
       - name: Build RAYTRACER_UNILIGHT
-        run: msbuild $env:Solution_Name /p:Configuration=${{ matrix.configuration }}
+        shell: pwsh
+        run: msbuild "$PWD/$env:Solution_Name" /p:Configuration=${{ matrix.configuration }}
 
       # Run tests (optional)
-      #- name: Run tests
-      #  run: dotnet test $env:Solution_Name --configuration ${{ matrix.configuration }}
-      #  continue-on-error: true
+      - name: Run tests
+        shell: pwsh
+        run: dotnet test "$PWD/$env:Solution_Name" --configuration ${{ matrix.configuration }}
+        continue-on-error: true
 
       # Publish main project
       - name: Publish RAYTRACER_UNILIGHT
-        run: dotnet publish $env:Project_Name -c ${{ matrix.configuration }} -o publish
+        shell: pwsh
+        run: dotnet publish "$PWD/$env:Project_Name" -c ${{ matrix.configuration }} -o "$PWD/publish"
 
       # Upload build artifacts
       - name: Upload build artifacts

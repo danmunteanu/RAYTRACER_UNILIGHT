@@ -7,10 +7,9 @@ namespace Unilight
 
     public class Raytracer
     {
-        private static int DEFAULT_TRACE_DEPTH = 5;
+        private static readonly int DEFAULT_TRACE_DEPTH = 5;
 
-        //  pixel traversal order
-        public TraversalOrder TraversalOrder { get; set; }
+        public delegate void UpdateCallback(int percent);
 
         private struct RayTraversalResult
         {
@@ -19,47 +18,56 @@ namespace Unilight
             public Vector3D? IntersectionPoint { get; set; }
         }
 
-        private ThreadLocal<Intersector> _intersector = new(() => new Intersector());
-
-        public delegate void UpdateCallback(int percent);
-
+        //  Callback for update
         public UpdateCallback? Callback { get; set; } = null;
 
-        public Camera Camera { get; set; } = new Camera();
-
-        public Scene? Scene { get; set; } = null;
-
-        //  Reference to the Bitmap we're drawing to
+        //  Pixel traversal order
+        public TraversalOrder TraversalOrder { get; set; }
+        
+        //  Reference to the Bitmap we're rendering to
         public Bitmap? Buffer { get; set; } = null;
 
+        //  Holds the transform that will convert a pixel on screen to 3D world coordinates
+        //  Computed in ComputeImageToViewportTransform
         private Matrix4? _imageToWorld = null;
 
-        public bool GlobalReflection { get; set; } = true;
-        public bool ComputeSpecular { get; set; } = false;
-        public bool ComputeDiffuse { get; set; } = false;
-        public bool ComputeAmbient { get; set; } = false;
-        public bool ComputeFog { get; set; } = false;
+        //  Camera instance
+        public Camera Camera { get; set; } = new Camera();
 
+        //  Reference to a Scene instance containing the objects to render
+        public Scene? Scene { get; set; } = null;
+
+        //  How deep shall we go?
         public int TraceDepth { get; set; } = DEFAULT_TRACE_DEPTH;
 
+        public bool GlobalReflectionEnabled { get; set; } = true;
+        public bool ComputeSpecularEnabled { get; set; } = false;
+        public bool ComputeDiffuseEnabled { get; set; } = false;
+        public bool ComputeAmbientEnabled { get; set; } = false;
+        public bool ComputeFogEnabled { get; set; } = false;
+
+        //  Each thread gets its own Intersector instance
+        private ThreadLocal<Intersector> _intersector = new(() => new Intersector());
+
+        //  Counts how many pixels we have to trace
         private int _pixelsToPlotCount = 0;
 
         public Raytracer() 
         { 
         }
 
-        private RgbColor computeSpecular(float vDotR, float mGls, RgbColor sourceSpec, float matSpec)
+        private RgbColor ComputeSpecularColor(float vDotR, float mGls, RgbColor sourceSpec, float matSpec)
         {
             float factor = (float)Math.Pow(vDotR, mGls) * matSpec;
             return sourceSpec * factor;
         }
 
-        private RgbColor computeDiffuse(float nDotL, RgbColor sourceDiff, RgbColor matDiff)
+        private RgbColor ComputeDiffuseColor(float nDotL, RgbColor sourceDiff, RgbColor matDiff)
         {
             return sourceDiff * nDotL * matDiff;
         }
 
-        private RgbColor trace(Ray ray, int depth)
+        private RgbColor Trace(Ray ray, int depth)
         {
             if (Scene == null || _intersector.Value == null) 
                 return RgbColor.Black;
@@ -115,28 +123,28 @@ namespace Unilight
                     r = 2 * n.Dot(l) * n - l;
                     r.Normalize();
 
-                    if (ComputeSpecular)
+                    if (ComputeSpecularEnabled)
                     {
                         float vDotR = v.Dot(r);
                         RgbColor spec = (vDotR > 0)
-                            ? computeSpecular(vDotR, mat.Gloss, light.getColor(), mat.Specular)
+                            ? ComputeSpecularColor(vDotR, mat.Gloss, light.getColor(), mat.Specular)
                             : RgbColor.Black;
                         lit = lit + spec;
                     }
 
-                    if (ComputeDiffuse)
+                    if (ComputeDiffuseEnabled)
                     {
                         float nDotL = n.Dot(l);
                         RgbColor diff = (nDotL > 0)
-                            ? computeDiffuse(nDotL, light.getColor(), mat.Color)
+                            ? ComputeDiffuseColor(nDotL, light.getColor(), mat.Color)
                             : RgbColor.Black;
                         lit = lit + diff;
                     }
 
-                    if (GlobalReflection && refl > 0 && depth < TraceDepth)
+                    if (GlobalReflectionEnabled && refl > 0 && depth < TraceDepth)
                     {
                         Ray reflected = new Ray(intersectionPoint, r);
-                        RgbColor acc = trace(reflected, depth + 1);
+                        RgbColor acc = Trace(reflected, depth + 1);
                         lit += acc * refl * mat.Color;
                     }
                 }
@@ -145,7 +153,7 @@ namespace Unilight
             return lit;
         }
 
-        private void ComputeImageToViewportTransform(int imageWidth, int imageHeight, out Matrix4 result)
+        private void ComputeImageToViewportTransform(int imageWidth, int imageHeight, out Matrix4 transform)
         {
             float width = Camera.ViewportWidth;
             float height = Camera.ViewportHeight;
@@ -153,7 +161,7 @@ namespace Unilight
             // If any dimension is zero, return identity
             if (imageWidth == 0 || imageHeight == 0 || width == 0 || height == 0)
             {
-                Matrix4.LoadIdentity(out result);
+                Matrix4.LoadIdentity(out transform);
                 return;
             }
 
@@ -180,7 +188,7 @@ namespace Unilight
             finalTransform.MultiplyThisBy(center);
 
             // Output the final transform
-            result = finalTransform;
+            transform = finalTransform;
         }
 
         public void Render()
@@ -191,22 +199,25 @@ namespace Unilight
             //  Compute image to world transform once
             ComputeImageToViewportTransform(Buffer.Width, Buffer.Height, out _imageToWorld);
 
-            //  Split render area in multiple chunks, depending on processor count
+            //  Split render area in multiple chunks
             List<(Point start, Point end)>? chunks = null;
             Chunks.CreateRenderChunks(Buffer.Width, Buffer.Height, out chunks);
 
-            //  Something went wrong with chunking
-            if (chunks == null) return;
+            //  Something went wrong while chunking
+            if (chunks == null) 
+                return;
 
             // Lock the bitmap once
             var rect = new Rectangle(0, 0, Buffer.Width, Buffer.Height);
-            var bmpData = Buffer.LockBits(rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var bmpData = Buffer.LockBits(rect, 
+                System.Drawing.Imaging.ImageLockMode.WriteOnly, 
+                System.Drawing.Imaging.PixelFormat.Format32bppArgb
+            );
 
             IntPtr ptr = bmpData.Scan0;
             int stride = bmpData.Stride;
             byte[] pixels = new byte[stride * Buffer.Height];
 
-            //_plottedPixels = 0;
             _pixelsToPlotCount = Buffer.Width * Buffer.Height;
 
             // Render all chunks in parallel
@@ -242,7 +253,7 @@ namespace Unilight
                 dir.Normalize();
                 Ray ray = new Ray(Camera.Eye, dir);
 
-                RgbColor c = trace(ray, 1);
+                RgbColor c = Trace(ray, 1);
 
                 // Write into pixel array (thread-safe)
                 int index = iter.Cursor.Y * stride + iter.Cursor.X * 4;

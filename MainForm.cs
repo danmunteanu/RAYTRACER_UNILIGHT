@@ -123,11 +123,11 @@ namespace Unilight
             mRaytracer.Callback = UpdateRenderProgress;
             mRaytracer.Camera = cam;
             mRaytracer.Buffer = mBuffer;
-            mRaytracer.GlobalReflection = true;
-            mRaytracer.ComputeFog = false;
-            mRaytracer.ComputeAmbient = true;
-            mRaytracer.ComputeSpecular = true;
-            mRaytracer.ComputeDiffuse = true;
+            mRaytracer.GlobalReflectionEnabled = true;
+            mRaytracer.ComputeFogEnabled = false;
+            mRaytracer.ComputeAmbientEnabled = true;
+            mRaytracer.ComputeSpecularEnabled = true;
+            mRaytracer.ComputeDiffuseEnabled = true;
             mRaytracer.TraceDepth = 5;
 
             LoadItemsList();
@@ -169,11 +169,11 @@ namespace Unilight
         public SettingsInfo LoadSettings()
         {
             SettingsInfo info = new SettingsInfo();
-            info.globalReflection = mRaytracer.GlobalReflection;
-            info.computeSpecular = mRaytracer.ComputeSpecular;
-            info.computeDiffuse = mRaytracer.ComputeDiffuse;
-            info.computeAmbient = mRaytracer.ComputeAmbient;
-            info.computeFog = mRaytracer.ComputeFog;
+            info.globalReflection = mRaytracer.GlobalReflectionEnabled;
+            info.computeSpecular = mRaytracer.ComputeSpecularEnabled;
+            info.computeDiffuse = mRaytracer.ComputeDiffuseEnabled;
+            info.computeAmbient = mRaytracer.ComputeAmbientEnabled;
+            info.computeFog = mRaytracer.ComputeFogEnabled;
             info.depth = mRaytracer.TraceDepth;
 
             Camera cam = mRaytracer.Camera;
@@ -187,11 +187,11 @@ namespace Unilight
         public void UpdateSettings(SettingsInfo info)
         {
             mRaytracer.TraceDepth = info.depth;
-            mRaytracer.ComputeAmbient = info.globalReflection;
-            mRaytracer.ComputeAmbient = info.computeSpecular;
-            mRaytracer.ComputeAmbient = info.computeDiffuse;
-            mRaytracer.ComputeAmbient = info.computeAmbient;
-            mRaytracer.ComputeAmbient = info.computeFog;
+            mRaytracer.ComputeAmbientEnabled = info.globalReflection;
+            mRaytracer.ComputeAmbientEnabled = info.computeSpecular;
+            mRaytracer.ComputeAmbientEnabled = info.computeDiffuse;
+            mRaytracer.ComputeAmbientEnabled = info.computeAmbient;
+            mRaytracer.ComputeAmbientEnabled = info.computeFog;
 
             Camera cam = mRaytracer.Camera;
             cam.Eye = info.eye;

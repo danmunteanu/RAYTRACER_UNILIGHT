@@ -1,3 +1,3 @@
-﻿global using EditorFactory = UnilightRaytracer.GenericFactory<UnilightRaytracer.EditorBase>;
+﻿global using EditorFactory = CommonGraphics.GenericFactory<CommonGraphics.EditorBase>;
 
 

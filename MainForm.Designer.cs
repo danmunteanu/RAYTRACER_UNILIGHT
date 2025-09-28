@@ -44,7 +44,7 @@
             btnUpdate = new Button();
             lstItems = new ListBox();
             panelEditor = new Panel();
-            editorGObject = new RAYTRACER_UNILIGHT.Editors.EditorGObject();
+            editorGObject = new RaytracerUnilight.Editors.EditorGObject();
             lblObjects = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureRender).BeginInit();
             tableLayoutTop.SuspendLayout();
@@ -316,7 +316,7 @@
         private Button btnSettings;
         private TableLayoutPanel tableLayoutItems;
         private Panel panelEditor;
-        private RAYTRACER_UNILIGHT.Editors.EditorGObject editorGObject;
+        private RaytracerUnilight.Editors.EditorGObject editorGObject;
         private Button btnUpdate;
         private TableLayoutPanel tableLayoutPanel1;
         private Button btnReset;

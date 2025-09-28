@@ -6,10 +6,15 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>RaytracerUnilight</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="MainForm.Designer.cs~RF4eb24d.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\COMMON_GRAPHICS\COMMON_GRAPHICS.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿namespace RAYTRACER_UNILIGHT.Editors
+﻿namespace RaytracerUnilight.Editors
 {
     partial class EditorMaterial
     {

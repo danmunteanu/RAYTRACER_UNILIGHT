@@ -5,6 +5,8 @@ VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RAYTRACER_UNILIGHT", "RAYTRACER_UNILIGHT.csproj", "{0AAF7CA3-9A8C-4C53-8A84-584616130377}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COMMON_GRAPHICS", "..\COMMON_GRAPHICS\COMMON_GRAPHICS.csproj", "{4DC62C4A-7CEF-48C8-9313-B80BD272E05F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0AAF7CA3-9A8C-4C53-8A84-584616130377}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AAF7CA3-9A8C-4C53-8A84-584616130377}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AAF7CA3-9A8C-4C53-8A84-584616130377}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DC62C4A-7CEF-48C8-9313-B80BD272E05F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DC62C4A-7CEF-48C8-9313-B80BD272E05F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DC62C4A-7CEF-48C8-9313-B80BD272E05F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DC62C4A-7CEF-48C8-9313-B80BD272E05F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

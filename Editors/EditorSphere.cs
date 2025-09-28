@@ -8,8 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using UnilightRaytracer;
+using CommonGraphics;
 
-namespace RAYTRACER_UNILIGHT.Editors
+namespace RaytracerUnilight.Editors
 {
     public partial class EditorSphere : EditorBase
     {

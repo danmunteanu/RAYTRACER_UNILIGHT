@@ -1,4 +1,4 @@
-﻿using UnilightRaytracer;
+﻿using Unilight;
 using CommonGraphics;
 
 namespace Unilight.Editors

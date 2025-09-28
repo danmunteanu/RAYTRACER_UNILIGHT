@@ -1,7 +1,7 @@
 using Unilight.Editors;
 using CommonGraphics;
 
-namespace UnilightRaytracer
+namespace Unilight
 {
     public partial class MainForm : Form
     {

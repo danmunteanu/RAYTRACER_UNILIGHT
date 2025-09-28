@@ -1,4 +1,4 @@
-namespace UnilightRaytracer
+namespace Unilight
 {
     // Item1 = Origin, Item2 = Direction
     using Ray = Tuple<Vector, Vector>;

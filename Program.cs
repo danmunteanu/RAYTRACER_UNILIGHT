@@ -1,4 +1,4 @@
-namespace UnilightRaytracer
+namespace Unilight
 {
     internal static class Program
     {

@@ -1,4 +1,4 @@
-﻿namespace UnilightRaytracer
+﻿namespace Unilight
 {
     partial class MainForm
     {

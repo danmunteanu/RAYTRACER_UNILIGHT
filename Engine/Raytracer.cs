@@ -1,6 +1,6 @@
 using CommonGraphics;
 
-namespace UnilightRaytracer
+namespace Unilight
 {
     //  1st = Origin, 2nd = Direction
     using Ray = Tuple<Vector, Vector>;
@@ -45,8 +45,6 @@ namespace UnilightRaytracer
 
         public int TraceDepth { get; set; } = DEFAULT_TRACE_DEPTH;
 
-        private bool mStopRender = false;
-
         public Raytracer() { }
 
         private RgbColor computeSpecular(float vDotR, float mGls, RgbColor sourceSpec, float matSpec)
@@ -62,7 +60,8 @@ namespace UnilightRaytracer
 
         private RgbColor trace(Ray ray, int depth)
         {
-            if (Scene == null) return RgbColor.Black;
+            if (Scene == null) 
+                return RgbColor.Black;
 
             mIntersector.Ray = ray;
 

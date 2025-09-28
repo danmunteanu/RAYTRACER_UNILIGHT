@@ -19,7 +19,7 @@
  * Date: 28-Sep-2025
  */
 
-namespace UnilightRaytracer
+namespace Unilight
 {
     public class RgbColor
     {

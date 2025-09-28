@@ -1,4 +1,4 @@
-namespace UnilightRaytracer
+namespace Unilight
 {
     public class PointLight
     {

@@ -49,19 +49,20 @@ namespace UnilightRaytracer
 
         public Raytracer() { }
 
-        private Color computeSpecular(float vDotR, float mGls, Color sourceSpec, float matSpec)
+        private RgbColor computeSpecular(float vDotR, float mGls, RgbColor sourceSpec, float matSpec)
         {
-            return sourceSpec.Multiply((float)Math.Pow(vDotR, mGls) * matSpec);
+            float factor = (float)Math.Pow(vDotR, mGls) * matSpec;
+            return sourceSpec * factor;
         }
 
-        private Color computeDiffuse(float nDotL, Color sourceDiff, Color matDiff)
+        private RgbColor computeDiffuse(float nDotL, RgbColor sourceDiff, RgbColor matDiff)
         {
-            return sourceDiff.Multiply(nDotL).Multiply(matDiff);
+            return sourceDiff * nDotL * matDiff;
         }
 
-        private Color trace(Ray ray, int depth)
+        private RgbColor trace(Ray ray, int depth)
         {
-            if (Scene == null) return Color.black;
+            if (Scene == null) return RgbColor.Black;
 
             mIntersector.Ray = ray;
 
@@ -86,7 +87,7 @@ namespace UnilightRaytracer
                 }
             }
 
-            Color lit = Color.black;
+            RgbColor lit = RgbColor.Black;
 
             if (closest != null && mIntersector.Result == Intersector.IntersectionResult.Hit)
             {
@@ -114,26 +115,26 @@ namespace UnilightRaytracer
                     if (ComputeSpecular)
                     {
                         float vDotR = v.Dot(r);
-                        Color spec = (vDotR > 0)
+                        RgbColor spec = (vDotR > 0)
                             ? computeSpecular(vDotR, mat.Gloss, light.getColor(), mat.Specular)
-                            : Color.black;
-                        lit = lit.Add(spec);
+                            : RgbColor.Black;
+                        lit = lit + spec;
                     }
 
                     if (ComputeDiffuse)
                     {
                         float nDotL = n.Dot(l);
-                        Color diff = (nDotL > 0)
+                        RgbColor diff = (nDotL > 0)
                             ? computeDiffuse(nDotL, light.getColor(), mat.Color)
-                            : Color.black;
-                        lit = lit.Add(diff);
+                            : RgbColor.Black;
+                        lit = lit + diff;
                     }
 
                     if (GlobalReflection && refl > 0 && depth < TraceDepth)
                     {
                         Ray reflected = new Ray(intersectionPoint, r);
-                        Color acc = trace(reflected, depth + 1);
-                        lit = lit.Add(acc.Multiply(refl).Multiply(mat.Color));
+                        RgbColor acc = trace(reflected, depth + 1);
+                        lit += acc * refl * mat.Color;
                     }
                 }
             }
@@ -227,13 +228,13 @@ namespace UnilightRaytracer
                 dir.Normalize();
                 Ray ray = new Ray(Camera.Eye, dir);
 
-                Color c = trace(ray, 1);
+                RgbColor c = trace(ray, 1);
 
                 // Write into pixel array (thread-safe)
                 int index = iter.Cursor.Y * stride + iter.Cursor.X * 4;
-                pixels[index + 0] = (byte)(c.b * 255);
-                pixels[index + 1] = (byte)(c.g * 255);
-                pixels[index + 2] = (byte)(c.r * 255);
+                pixels[index + 0] = (byte)(c.B * 255);
+                pixels[index + 1] = (byte)(c.G * 255);
+                pixels[index + 2] = (byte)(c.R * 255);
                 pixels[index + 3] = 255; // full opacity
 
                 // Thread-safe progress update

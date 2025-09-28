@@ -7,7 +7,7 @@ namespace UnilightRaytracer
         {
         }
 
-        public Color Color { get; set; } = new(0, 0, 0);
+        public RgbColor Color { get; set; } = new(0, 0, 0);
 
         //  the "Phong" exponent;
         //  small => large hotspot, gradual fallof;

@@ -12,7 +12,7 @@ namespace Unilight.Editors
 
         public override void ResetState()
         {
-            //  TBD: Color
+            panelColor.BackColor = System.Drawing.Color.White;
             numGloss.Value = 0;
             numSpecular.Value = 0;
             numReflection.Value = 0;
@@ -31,9 +31,9 @@ namespace Unilight.Editors
             if (obj.Material == null)
                 return;
 
-            int r = (int)(obj.Material.Color.r * 255);
-            int g = (int)(obj.Material.Color.g * 255);
-            int b = (int)(obj.Material.Color.b * 255);
+            int r = (int)(obj.Material.Color.R * 255);
+            int g = (int)(obj.Material.Color.G * 255);
+            int b = (int)(obj.Material.Color.B * 255);
             panelColor.BackColor = System.Drawing.Color.FromArgb(r, g, b);
 
             numGloss.Value = (decimal)obj.Material.Gloss;
@@ -51,9 +51,9 @@ namespace Unilight.Editors
 
             // take color from panel and store back into Material.Color
             var c = panelColor.BackColor;
-            obj.Material.Color.r = c.R / 255f;
-            obj.Material.Color.g = c.G / 255f;
-            obj.Material.Color.b = c.B / 255f;
+            obj.Material.Color.R = c.R / 255f;
+            obj.Material.Color.R = c.G / 255f;
+            obj.Material.Color.R = c.B / 255f;
 
             // save numeric values back into material
             obj.Material.Gloss = (float)numGloss.Value;

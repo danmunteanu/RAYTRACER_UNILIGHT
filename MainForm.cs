@@ -57,7 +57,7 @@ namespace UnilightRaytracer
 
             Sphere s1 = new Sphere();
             s1.Origin = new Vector(-3.5f, 0, 0);
-            s1.Material.Color = Color.blue;
+            s1.Material.Color = RgbColor.Blue;
             s1.Material.Gloss = 30;
             s1.Material.Specular = 1.0f;
             s1.Material.Reflection = 1.0f;
@@ -67,7 +67,7 @@ namespace UnilightRaytracer
 
             Sphere s2 = new Sphere();
             s2.Origin = new Vector(3, 0, 0);
-            s2.Material.Color = Color.red;
+            s2.Material.Color = RgbColor.Red;
             s2.Material.Gloss = 10;
             s2.Material.Specular = 0.8f;
             s2.Material.Reflection = 0.0f;
@@ -78,7 +78,7 @@ namespace UnilightRaytracer
 
             Sphere s3 = new Sphere();
             s3.Origin = new Vector(0, 0, 0);
-            s3.Material.Color = Color.green;
+            s3.Material.Color = RgbColor.Green;
             s3.Material.Gloss = 10;
             s3.Material.Specular = 0;
             s3.Material.Reflection = 0;
@@ -87,12 +87,12 @@ namespace UnilightRaytracer
             mScene.AddObject(s3);
 
             Plane pln = new();
-            pln.Material.Color = Color.yellow;
+            pln.Material.Color = RgbColor.Yellow;
             mScene.AddObject(pln);
 
             PointLight p = new PointLight();
             p.setPosition(new Vector(0, 15, 35));
-            p.setColor(Color.white);
+            p.setColor(RgbColor.White);
             p.setName("Point Light");
             p.setEnabled(true);
 

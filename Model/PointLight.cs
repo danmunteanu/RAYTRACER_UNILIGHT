@@ -3,7 +3,7 @@ namespace UnilightRaytracer
     public class PointLight
     {
         private Vector position = new Vector();
-        private Color color = new Color(1, 1, 1);    //  same color used for diffuse and specular
+        private RgbColor color = new RgbColor(1, 1, 1);    //  same color used for diffuse and specular
         private String name = "Point light";
         private bool enabled = true;
 
@@ -21,12 +21,12 @@ namespace UnilightRaytracer
             return position;
         }
 
-        public void setColor(Color c)
+        public void setColor(RgbColor c)
         {
             color = c;
         }
 
-        public Color getColor()
+        public RgbColor getColor()
         {
             return color;
         }

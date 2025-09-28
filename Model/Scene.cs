@@ -39,6 +39,8 @@ namespace Unilight
         public int ObjectCount => objects.Count;
         public GObject? GetObjectAt(int idx) => (idx >= 0 && idx < objects.Count) ? objects[idx] : null;
 
+        public int IndexOfObject(GObject obj) => objects.IndexOf(obj);
+
         // --- Lights ---
 
         public void AddLight(PointLight light) => lights.Add(light);

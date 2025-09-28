@@ -295,5 +295,24 @@ namespace Unilight
         {
             OnShowSettings();
         }
+
+        private void pictureRender_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (_raytracer == null) return;
+
+            var obj = _raytracer.PickObjectAt(e.X, e.Y, out var hitPoint);
+
+            if (obj != null)
+            {
+                //MessageBox.Show($"You clicked on object: {obj.Name} at {hitPoint}");
+                int idx = _scene.IndexOfObject(obj);
+                if ( idx != -1)
+                    lstItems.SelectedIndex = idx;
+            }
+            else
+            {
+                MessageBox.Show("No object hit.");
+            }
+        }
     }
 }

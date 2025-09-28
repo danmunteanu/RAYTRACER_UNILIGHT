@@ -61,17 +61,6 @@ namespace Unilight
         { 
         }
 
-        private RgbColor ComputeSpecularColor(float vDotR, float mGls, RgbColor sourceSpec, float matSpec)
-        {
-            float factor = (float)Math.Pow(vDotR, mGls) * matSpec;
-            return sourceSpec * factor;
-        }
-
-        private RgbColor ComputeDiffuseColor(float nDotL, RgbColor sourceDiff, RgbColor matDiff)
-        {
-            return sourceDiff * nDotL * matDiff;
-        }
-
         private RgbColor Trace(Ray ray, int depth)
         {
             if (Scene == null || _intersector.Value == null) 
@@ -157,6 +146,81 @@ namespace Unilight
 
             return lit;
         }
+
+        private RgbColor ComputeSpecularColor(float vDotR, float mGls, RgbColor sourceSpec, float matSpec)
+        {
+            float factor = (float)Math.Pow(vDotR, mGls) * matSpec;
+            return sourceSpec * factor;
+        }
+
+        private RgbColor ComputeDiffuseColor(float nDotL, RgbColor sourceDiff, RgbColor matDiff)
+        {
+            return sourceDiff * nDotL * matDiff;
+        }
+
+        public Ray GetRayFromPixel(int x, int y)
+        {
+            if (_imageToWorld == null)
+            {
+                if (Buffer == null)
+                    throw new InvalidOperationException("Buffer is not initialized.");
+
+                ComputeImageToViewportTransform(Buffer.Width, Buffer.Height, out _imageToWorld);
+            }
+
+            Vector3D mapped = _imageToWorld.MultiplyBy(new Vector3D(x, y, 0));
+            Vector3D dir = mapped - Camera.Eye;
+            dir.Normalize();
+
+            return new Ray(Camera.Eye, dir);
+        }
+
+
+        public GObject? PickObjectAt(int x, int y, out Vector3D? hitPoint)
+        {
+            hitPoint = null;
+
+            if (Scene == null)
+                return null;
+
+            Ray ray = GetRayFromPixel(x, y);
+
+            Intersector? intersector = _intersector.Value;
+            if (intersector == null)
+                return null;
+
+            intersector.Ray = ray;
+
+            GObject? closest = null;
+            float dist = float.MaxValue;
+            Vector3D intersectionPoint = new();
+
+            for (int k = 0; k < Scene.ObjectCount; ++k)
+            {
+                GObject? gObject = Scene.GetObjectAt(k);
+                if (gObject == null || !gObject.Enabled)
+                    continue;
+
+                gObject.Accept(intersector);
+
+                if (intersector.Result == Intersector.IntersectionResult.Hit &&
+                    intersector.Distance < dist)
+                {
+                    dist = intersector.Distance;
+                    closest = gObject;
+                    intersectionPoint = intersector.IntersectionPoint;
+                }
+            }
+
+            if (closest != null)
+            {
+                hitPoint = intersectionPoint;
+                return closest;
+            }
+
+            return null;
+        }
+
 
         private void ComputeImageToViewportTransform(int imageWidth, int imageHeight, out Matrix4 transform)
         {

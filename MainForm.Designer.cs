@@ -108,12 +108,13 @@
             pictureRender.BackgroundImageLayout = ImageLayout.None;
             pictureRender.Dock = DockStyle.Fill;
             pictureRender.Location = new Point(327, 2);
-            pictureRender.Margin = new Padding(2, 2, 2, 2);
+            pictureRender.Margin = new Padding(2);
             pictureRender.Name = "pictureRender";
             pictureRender.Size = new Size(783, 670);
             pictureRender.SizeMode = PictureBoxSizeMode.Zoom;
             pictureRender.TabIndex = 5;
             pictureRender.TabStop = false;
+            pictureRender.MouseClick += pictureRender_MouseClick;
             // 
             // tableLayoutTop
             // 

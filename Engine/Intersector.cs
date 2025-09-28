@@ -1,7 +1,7 @@
 namespace Unilight
 {
     // Item1 = Origin, Item2 = Direction
-    using Ray = Tuple<Vector, Vector>;
+    using Ray = Tuple<Vector3D, Vector3D>;
 
     public class Intersector : Visitor
     {
@@ -25,13 +25,13 @@ namespace Unilight
         public float Distance { get; set; } = float.MaxValue;
 
         // point of intersection (non-nullable now)
-        public Vector IntersectionPoint { get; set; } = Vector.Zero;
+        public Vector3D IntersectionPoint { get; set; } = Vector3D.Zero;
 
         private void intersectionMiss()
         {
             Result = IntersectionResult.Miss;
             Distance = float.MaxValue;
-            IntersectionPoint = Vector.Zero;
+            IntersectionPoint = Vector3D.Zero;
         }
 
         public void Visit(Plane p)
@@ -63,7 +63,7 @@ namespace Unilight
                 return;
             }
 
-            Vector e = s.Origin - mRay.Item1;
+            Vector3D e = s.Origin - mRay.Item1;
             float a = e.Dot(mRay.Item2);
             float e2 = e.Length();
             e2 *= e2;
@@ -90,18 +90,18 @@ namespace Unilight
                 return;
             }
 
-            Vector origin = tri.Origin;
-            Vector v1 = tri.getV1() + origin;
-            Vector v2 = tri.getV2() + origin;
-            Vector v3 = tri.getV3() + origin;
+            Vector3D origin = tri.Origin;
+            Vector3D v1 = tri.getV1() + origin;
+            Vector3D v2 = tri.getV2() + origin;
+            Vector3D v3 = tri.getV3() + origin;
 
             // Implementation of Möller's algorithm
-            Vector E1 = v2 - v1;
-            Vector E2 = v3 - v1;
-            Vector D = mRay.Item2;
-            Vector P = D.Cross(E2);
-            Vector T = mRay.Item1 - v1;
-            Vector Q = T.Cross(E1);
+            Vector3D E1 = v2 - v1;
+            Vector3D E2 = v3 - v1;
+            Vector3D D = mRay.Item2;
+            Vector3D P = D.Cross(E2);
+            Vector3D T = mRay.Item1 - v1;
+            Vector3D Q = T.Cross(E1);
 
             float pDotE1Inv = 1.0f / P.Dot(E1);
 

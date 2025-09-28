@@ -12,10 +12,10 @@ namespace Unilight
             v.Visit (this);
         }
     
-        public override Vector GetNormalAt(Vector p)
+        public override Vector3D GetNormalAt(Vector3D p)
         {
             // Compute local coordinates relative to box center
-            Vector local = p - Origin;
+            Vector3D local = p - Origin;
             float halfW = Width / 2f;
             float halfH = Height / 2f;
             float halfD = Depth / 2f;
@@ -30,12 +30,12 @@ namespace Unilight
 
             float min = Math.Min(Math.Min(Math.Min(dx, dxNeg), Math.Min(dy, dyNeg)), Math.Min(dz, dzNeg));
 
-            if (min == dx) return new Vector(1, 0, 0);
-            if (min == dxNeg) return new Vector(-1, 0, 0);
-            if (min == dy) return new Vector(0, 1, 0);
-            if (min == dyNeg) return new Vector(0, -1, 0);
-            if (min == dz) return new Vector(0, 0, 1);
-            return new Vector(0, 0, -1);
+            if (min == dx) return new Vector3D(1, 0, 0);
+            if (min == dxNeg) return new Vector3D(-1, 0, 0);
+            if (min == dy) return new Vector3D(0, 1, 0);
+            if (min == dyNeg) return new Vector3D(0, -1, 0);
+            if (min == dz) return new Vector3D(0, 0, 1);
+            return new Vector3D(0, 0, -1);
         }
     }
 

@@ -33,7 +33,7 @@ namespace Unilight.Editors
                 return;
 
             // Update the plane's normal
-            pl.Normal = new Vector(
+            pl.Normal = new Vector3D(
                 (float)numX.Value,
                 (float)numY.Value,
                 (float)numZ.Value

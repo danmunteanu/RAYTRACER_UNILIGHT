@@ -3,7 +3,7 @@ namespace Unilight
 
     public class Plane : GObject
     {
-        public Vector Normal { get; set; } = new (0, 1, 0);
+        public Vector3D Normal { get; set; } = new (0, 1, 0);
         public float Distance { get; set; } = 0;
 
         public Plane()
@@ -11,7 +11,7 @@ namespace Unilight
             Name = "Plane " + _instanceCount;
         }
 
-        public Plane(Vector n, float d)
+        public Plane(Vector3D n, float d)
         {
             Normal = n;
             Distance = d;
@@ -24,7 +24,7 @@ namespace Unilight
             v.Visit(this);
         }
 
-        public override Vector GetNormalAt(Vector p)
+        public override Vector3D GetNormalAt(Vector3D p)
         {
             return Normal;
         }

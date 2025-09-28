@@ -106,9 +106,9 @@ namespace Unilight
             }
         }
 
-        public Vector Multiply(Vector v)
+        public Vector3D Multiply(Vector3D v)
         {
-            Vector result = new Vector();
+            Vector3D result = new Vector3D();
 
             //  compute x
             float sum = 0;

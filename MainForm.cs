@@ -13,8 +13,8 @@ namespace Unilight
             public bool computeAmbient = true;
             public bool computeFog = true;
             public int depth = 1;
-            public Vector eye;
-            public Vector lookAt;
+            public Vector3D eye;
+            public Vector3D lookAt;
             public float width = 0;
             public float height = 0;
         }
@@ -56,7 +56,7 @@ namespace Unilight
             mScene = new Scene();
 
             Sphere s1 = new Sphere();
-            s1.Origin = new Vector(-3.5f, 0, 0);
+            s1.Origin = new Vector3D(-3.5f, 0, 0);
             s1.Material.Color = RgbColor.Blue;
             s1.Material.Gloss = 30;
             s1.Material.Specular = 1.0f;
@@ -66,7 +66,7 @@ namespace Unilight
             mScene.AddObject(s1);
 
             Sphere s2 = new Sphere();
-            s2.Origin = new Vector(3, 0, 0);
+            s2.Origin = new Vector3D(3, 0, 0);
             s2.Material.Color = RgbColor.Red;
             s2.Material.Gloss = 10;
             s2.Material.Specular = 0.8f;
@@ -77,7 +77,7 @@ namespace Unilight
             mScene.AddObject(s2);
 
             Sphere s3 = new Sphere();
-            s3.Origin = new Vector(0, 0, 0);
+            s3.Origin = new Vector3D(0, 0, 0);
             s3.Material.Color = RgbColor.Green;
             s3.Material.Gloss = 10;
             s3.Material.Specular = 0;
@@ -91,7 +91,7 @@ namespace Unilight
             mScene.AddObject(pln);
 
             PointLight p = new PointLight();
-            p.setPosition(new Vector(0, 15, 35));
+            p.setPosition(new Vector3D(0, 15, 35));
             p.setColor(RgbColor.White);
             p.setName("Point Light");
             p.setEnabled(true);
@@ -112,8 +112,8 @@ namespace Unilight
             //  setup camera
             Camera cam = new()
             {
-                Eye = new Vector(0, 15, 35),
-                LookAt = new Vector(0, 0, 0),
+                Eye = new Vector3D(0, 15, 35),
+                LookAt = new Vector3D(0, 0, 0),
                 ViewportWidth = 12,
                 ViewportHeight = 9,
             };

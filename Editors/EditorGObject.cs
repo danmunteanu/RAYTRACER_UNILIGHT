@@ -51,7 +51,7 @@ namespace Unilight.Editors
 
             obj.Name = txtName.Text;
 
-            Vector temp = obj.Origin;
+            Vector3D temp = obj.Origin;
             temp.X = (float)numX.Value;
             temp.Y = (float)numY.Value;
             temp.Z = (float)numZ.Value;

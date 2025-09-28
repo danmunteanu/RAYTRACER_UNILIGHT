@@ -4,13 +4,13 @@ namespace Unilight
     {
         protected static int _instanceCount = 0; // shared across all instances
 
-        private Vector mOrigin = new Vector();
+        private Vector3D mOrigin = new Vector3D();
         
         public string Name { get; set; }
 
         public Material Material { get; set; } = new ();
         
-        public Vector Origin
+        public Vector3D Origin
         {
             get => mOrigin;
             set => mOrigin = value;
@@ -26,6 +26,6 @@ namespace Unilight
 
         public abstract void Accept(Visitor v);
 
-        public abstract Vector GetNormalAt(Vector p);
+        public abstract Vector3D GetNormalAt(Vector3D p);
     }
 }

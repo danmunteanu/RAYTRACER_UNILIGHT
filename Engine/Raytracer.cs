@@ -3,12 +3,12 @@ using CommonGraphics;
 namespace Unilight
 {
     //  1st = Origin, 2nd = Direction
-    using Ray = Tuple<Vector, Vector>;
+    using Ray = Tuple<Vector3D, Vector3D>;
 
     using IntPair = Tuple<int, int>;
 
     //  Eye, LookAt, ViewportWidth, ViewportHeight
-    using TCamera = Tuple<Vector, Vector, float, float>;
+    using TCamera = Tuple<Vector3D, Vector3D, float, float>;
 
     public class Raytracer
     {
@@ -21,7 +21,7 @@ namespace Unilight
         {
             public GObject? Closest { get; set; }
             public float Distance { get; set; }
-            public Vector? IntersectionPoint { get; set; }
+            public Vector3D? IntersectionPoint { get; set; }
         }
 
         public delegate void UpdateCallback(int percent);
@@ -67,7 +67,7 @@ namespace Unilight
 
             GObject? closest = null;
             float dist = float.MaxValue;
-            Vector intersectionPoint = new();
+            Vector3D intersectionPoint = new();
 
             for (int k = 0; k < Scene.CountObjects(); ++k)
             {
@@ -90,16 +90,16 @@ namespace Unilight
 
             if (closest != null && mIntersector.Result == Intersector.IntersectionResult.Hit)
             {
-                Vector n = closest.GetNormalAt(intersectionPoint);
+                Vector3D n = closest.GetNormalAt(intersectionPoint);
                 n.Normalize();
 
                 Material mat = closest.Material;
                 float refl = mat.Reflection;
 
-                Vector v = ray.Item1 - intersectionPoint; // point to eye vector
+                Vector3D v = ray.Item1 - intersectionPoint; // point to eye vector
                 v.Normalize();
-                Vector r; // reflected ray
-                Vector l; // light vector
+                Vector3D r; // reflected ray
+                Vector3D l; // light vector
 
                 for (int k = 0; k < Scene.CountLights(); ++k)
                 {
@@ -150,7 +150,7 @@ namespace Unilight
 
             Matrix4 finalTransform = Matrix4.translate(cam.LookAt.X, cam.LookAt.Y, cam.LookAt.Z);
 
-            Vector invNormal = cam.Eye - cam.LookAt;
+            Vector3D invNormal = cam.Eye - cam.LookAt;
             invNormal.Normalize();
 
             Matrix4 scale = Matrix4.identity();
@@ -222,8 +222,8 @@ namespace Unilight
 
             while (!iter.Done())
             {
-                Vector mapped = i2v.Multiply(new Vector(iter.Cursor.X, iter.Cursor.Y, 0));
-                Vector dir = mapped - Camera.Eye;
+                Vector3D mapped = i2v.Multiply(new Vector3D(iter.Cursor.X, iter.Cursor.Y, 0));
+                Vector3D dir = mapped - Camera.Eye;
                 dir.Normalize();
                 Ray ray = new Ray(Camera.Eye, dir);
 

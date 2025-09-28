@@ -10,7 +10,7 @@ namespace Unilight
             Name = "Sphere " + _instanceCount;
         }
 
-        public Sphere(Vector origin, float radius)
+        public Sphere(Vector3D origin, float radius)
         {
             Origin = origin;
             this.Radius = radius;
@@ -21,9 +21,9 @@ namespace Unilight
             v.Visit(this);
         }
 
-        public override Vector GetNormalAt(Vector p)
+        public override Vector3D GetNormalAt(Vector3D p)
         {
-            return p.Subtract(Origin).Multiply(Radius);
+            return (p - Origin).Normalized();
         }
 
         /*public override Tuple<Vector, Vector> ComputeBoundary()

@@ -2,7 +2,7 @@ namespace Unilight
 {
     public class PointLight
     {
-        private Vector position = new Vector();
+        private Vector3D position = new Vector3D();
         private RgbColor color = new RgbColor(1, 1, 1);    //  same color used for diffuse and specular
         private String name = "Point light";
         private bool enabled = true;
@@ -11,12 +11,12 @@ namespace Unilight
         {
         }
 
-        public void setPosition(Vector p)
+        public void setPosition(Vector3D p)
         {
             position = p;
         }
 
-        public Vector getPosition()
+        public Vector3D getPosition()
         {
             return position;
         }

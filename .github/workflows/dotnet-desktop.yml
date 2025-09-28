@@ -17,41 +17,61 @@ jobs:
     env:
       Solution_Name: RAYTRACER_UNILIGHT.sln
       Project_Name: RAYTRACER_UNILIGHT.csproj
+      CommonRepo_Url: https://github.com/danmunteanu/COMMON_GRAPHICS.git
+      CommonSolution_Name: COMMON_GRAPHICS.sln
+      CommonProject_Name: COMMON_GRAPHICS.csproj
 
     steps:
-      - name: Checkout
+      # Checkout main repository
+      - name: Checkout RAYTRACER_UNILIGHT
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # Install the .NET SDK
+      # Checkout COMMON_GRAPHICS into a subfolder
+      - name: Checkout COMMON_GRAPHICS
+        uses: actions/checkout@v4
+        with:
+          repository: danmunteanu/COMMON_GRAPHICS
+          path: COMMON_GRAPHICS
+          fetch-depth: 0
+
+      # Install .NET SDK
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
 
-      # Add MSBuild to PATH
+      # Setup MSBuild
       - name: Setup MSBuild.exe
         uses: microsoft/setup-msbuild@v2
 
-      # Restore NuGet packages
-      - name: Restore
+      # Restore COMMON_GRAPHICS packages
+      - name: Restore COMMON_GRAPHICS
+        run: msbuild COMMON_GRAPHICS/$env:CommonSolution_Name /t:Restore /p:Configuration=${{ matrix.configuration }}
+
+      # Build COMMON_GRAPHICS
+      - name: Build COMMON_GRAPHICS
+        run: msbuild COMMON_GRAPHICS/$env:CommonSolution_Name /p:Configuration=${{ matrix.configuration }}
+
+      # Restore RAYTRACER_UNILIGHT packages
+      - name: Restore RAYTRACER_UNILIGHT
         run: msbuild $env:Solution_Name /t:Restore /p:Configuration=${{ matrix.configuration }}
 
-      # Build the project
-      - name: Build
+      # Build RAYTRACER_UNILIGHT
+      - name: Build RAYTRACER_UNILIGHT
         run: msbuild $env:Solution_Name /p:Configuration=${{ matrix.configuration }}
 
-      # Run tests (if you add a test project later)
-      - name: Run tests
-        run: dotnet test $env:Solution_Name --configuration ${{ matrix.configuration }}
-        continue-on-error: true
+      # Run tests (optional)
+      # - name: Run tests
+      #  run: dotnet test $env:Solution_Name --configuration ${{ matrix.configuration }}
+      #  continue-on-error: true
 
-      # Publish the project (generates an exe in artifact folder)
+      # Publish RAYTRACER_UNILIGHT
       - name: Publish
         run: dotnet publish $env:Project_Name -c ${{ matrix.configuration }} -o publish
 
-      # Upload build output as artifact
+      # Upload build artifacts
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:

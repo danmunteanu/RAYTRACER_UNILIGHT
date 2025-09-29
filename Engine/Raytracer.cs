@@ -5,7 +5,7 @@ namespace Unilight
     //  1st = Origin, 2nd = Direction
     using Ray = Tuple<Vector3D, Vector3D>;
 
-    public class Raytracer : Renderer
+    public class Raytracer : RenderBase
     {
         private static readonly int DEFAULT_TRACE_DEPTH = 5;
 

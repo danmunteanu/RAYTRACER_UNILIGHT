@@ -44,7 +44,7 @@ namespace Unilight
         public Raytracer() 
         {
             //  pass a chunk renderer to the base class
-            base.RenderTask = RenderChunk;
+            base.RenderChunk = RenderChunk;
         }
 
         private RgbColor Trace(Ray ray, int depth)

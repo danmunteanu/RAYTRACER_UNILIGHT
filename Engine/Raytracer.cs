@@ -5,14 +5,9 @@ namespace Unilight
     //  1st = Origin, 2nd = Direction
     using Ray = Tuple<Vector3D, Vector3D>;
 
-    public class Raytracer
+    public class Raytracer : Renderer
     {
         private static readonly int DEFAULT_TRACE_DEPTH = 5;
-
-        public delegate void UpdateCallback(int percent);
-
-        //  Callback for update
-        public UpdateCallback? Callback { get; set; } = null;
 
         private struct RayTraversalResult
         {
@@ -20,16 +15,6 @@ namespace Unilight
             public float Distance { get; set; }
             public Vector3D? IntersectionPoint { get; set; }
         }
-
-        //  Pixel traversal order
-        public TraversalOrder TraversalOrder { get; set; }
-        
-        //  Reference to the Bitmap we're rendering to
-        public Bitmap? Buffer { get; set; } = null;
-
-        //  Holds the transform that will convert a pixel on screen to 3D world coordinates
-        //  Computed in ComputeImageToViewportTransform
-        private Matrix4? _imageToWorld = null;
 
         //  Camera instance
         public Camera Camera { get; set; } = new Camera();
@@ -49,16 +34,17 @@ namespace Unilight
         //  Each thread gets its own Intersector instance
         private ThreadLocal<Intersector> _intersector = new(() => new Intersector());
 
-        private int _plottedPixels = 0;
+        //  Holds the transform that will convert a pixel on screen to 3D world coordinates
+        //  Computed in ComputeImageToViewportTransform
+        private Matrix4? _imageToWorld = null;
 
-        //  Counts how many pixels we have to trace
-        private int _pixelsToPlotCount = 0;
-
-        private int _lastReportedPercent = 0;
-
+        //  Pixel traversal order
+        public TraversalOrder TraversalOrder { get; set; }
 
         public Raytracer() 
-        { 
+        {
+            //  pass a chunk renderer to the base class
+            base.RenderTask = RenderChunk;
         }
 
         private RgbColor Trace(Ray ray, int depth)
@@ -221,7 +207,6 @@ namespace Unilight
             return null;
         }
 
-
         private void ComputeImageToViewportTransform(int imageWidth, int imageHeight, out Matrix4 transform)
         {
             float width = Camera.ViewportWidth;
@@ -260,7 +245,7 @@ namespace Unilight
             transform = finalTransform;
         }
 
-        public void Render()
+        public override void Render()
         {
             if (Buffer == null)
                 return;
@@ -268,42 +253,8 @@ namespace Unilight
             //  Compute image to world transform once
             ComputeImageToViewportTransform(Buffer.Width, Buffer.Height, out _imageToWorld);
 
-            //  Split render area in multiple chunks
-            List<(Point start, Point end)>? chunks = null;
-            Chunks.CreateRenderChunks(Buffer.Width, Buffer.Height, out chunks);
-
-            //  Something went wrong while chunking
-            if (chunks == null) 
-                return;
-
-            // Lock the bitmap once
-            var rect = new Rectangle(0, 0, Buffer.Width, Buffer.Height);
-            var bmpData = Buffer.LockBits(rect, 
-                System.Drawing.Imaging.ImageLockMode.WriteOnly, 
-                System.Drawing.Imaging.PixelFormat.Format32bppArgb
-            );
-
-            IntPtr ptr = bmpData.Scan0;
-            int stride = bmpData.Stride;
-            byte[] pixels = new byte[stride * Buffer.Height];
-
-            _plottedPixels = 0;
-            _pixelsToPlotCount = Buffer.Width * Buffer.Height;
-            _lastReportedPercent = 0;
-            Callback?.Invoke(0);
-
-            // Render all chunks in parallel
-            Parallel.ForEach(chunks, chunk =>
-            {
-                RenderChunk(chunk.start, chunk.end, pixels, stride);
-            });
-
-            // Copy back into bitmap
-            System.Runtime.InteropServices.Marshal.Copy(pixels, 0, ptr, pixels.Length);
-            Buffer.UnlockBits(bmpData);
-
-            // 100% progress
-            Callback?.Invoke(100);
+            base.Render();
+            
         }
 
         private void RenderChunk(Point start, Point end, byte[] pixels, int stride)

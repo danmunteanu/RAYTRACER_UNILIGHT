@@ -109,6 +109,10 @@ namespace Unilight
         {
             InitializeComponent();
 
+            lstItems.DrawItem += lstItems_DrawItem;
+            lstItems.DrawMode = DrawMode.OwnerDrawFixed;
+            lstItems.DoubleClick += lstItems_DoubleClick;
+
             BuildScene();
 
             RegisterEditors();
@@ -218,6 +222,7 @@ namespace Unilight
             if (lstItems.SelectedIndex == -1)
             {
                 editorGObject.Enabled = false;
+
                 return;
             }
 
@@ -268,9 +273,7 @@ namespace Unilight
             editorGObject.SaveState(item);
             var editor = _editorCache.FindOrCreateEditor(item.GetType().Name);
             if (editor != null)
-            {
                 editor.SaveState(item);
-            }
 
             lstItems.Items[lstItems.SelectedIndex] = item.Name;
         }
@@ -322,9 +325,61 @@ namespace Unilight
             }
             else
             {
-                MessageBox.Show("No object hit.");
+                if (lstItems.SelectedIndex >= 0 && lstItems.SelectedIndex < lstItems.Items.Count)
+                {
+                    //  have selection?
+                    var lastObj = _scene.GetObjectAt(lstItems.SelectedIndex);
+                    if (lastObj != null)
+                    {
+                        var editor = _editorCache.FindOrCreateEditor(lastObj.GetType().Name);
+                        editor?.Enabled = false;
+                    }
+                }
+                lstItems.SelectedIndex = -1;
+                //MessageBox.Show("No object hit.");
             }
         }
 
+        private void lstItems_DrawItem(object? sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0) return;
+
+            e.DrawBackground();
+            e.DrawFocusRectangle();
+
+            string? text = lstItems.Items[e.Index].ToString();
+            Font font = lstItems.Font;
+
+            //  make sure index is valid in Processor
+            if (e.Index >= 0 && e.Index < _scene.ObjectCount)
+            {
+                var obj = _scene.GetObjectAt(e.Index);
+                if (obj != null && !obj.Enabled)
+                    font = new Font(font, FontStyle.Strikeout);
+            }
+
+            using (Brush textBrush = new SolidBrush(e.ForeColor))
+            {
+                e.Graphics.DrawString(text, font, textBrush, e.Bounds);
+            }
+        }
+
+        private void lstItems_DoubleClick(object sender, EventArgs e)
+        {
+            if (lstItems.SelectedIndex < 0) return;
+
+            if (lstItems.SelectedIndex >= 0 && lstItems.SelectedIndex < _scene.ObjectCount)
+            {
+                var obj = _scene.GetObjectAt(lstItems.SelectedIndex);
+                if (obj != null)
+                {
+                    obj.Enabled = !obj.Enabled;
+                    lstItems.Invalidate();
+
+                    //  reload object state
+                    editorGObject.LoadState(obj);
+                }
+            }
+        }
     }
 }

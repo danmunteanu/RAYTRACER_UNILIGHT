@@ -298,15 +298,26 @@ namespace Unilight
 
         private void pictureRender_MouseClick(object sender, MouseEventArgs e)
         {
-            if (_raytracer == null) return;
+            if (_raytracer == null || pictureRender.Image == null)
+                return;
 
-            var obj = _raytracer.PickObjectAt(e.X, e.Y, out var hitPoint);
+            // Translate mouse position to image coordinates
+            Point imgPoint = Utils.TranslatePointToImage(pictureRender, e.Location);
+
+            // If outside the actual drawn image area, ignore
+            if (imgPoint == Point.Empty)
+            {
+                MessageBox.Show("Clicked outside the rendered image.");
+                return;
+            }
+
+            // Use translated coordinates for ray picking
+            var obj = _raytracer.PickObjectAt(imgPoint.X, imgPoint.Y, out var hitPoint);
 
             if (obj != null)
             {
-                //MessageBox.Show($"You clicked on object: {obj.Name} at {hitPoint}");
                 int idx = _scene.IndexOfObject(obj);
-                if ( idx != -1)
+                if (idx != -1)
                     lstItems.SelectedIndex = idx;
             }
             else
@@ -314,5 +325,6 @@ namespace Unilight
                 MessageBox.Show("No object hit.");
             }
         }
+
     }
 }

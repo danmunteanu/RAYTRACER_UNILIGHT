@@ -1,7 +1,7 @@
 namespace Unilight
 {
 
-    public class Material //    implements java.io.Serializable
+    public class Material
     {
         public Material()
         {

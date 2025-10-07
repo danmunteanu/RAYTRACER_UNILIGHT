@@ -332,7 +332,7 @@ namespace Unilight
                     if (lastObj != null)
                     {
                         var editor = _editorCache.FindOrCreateEditor(lastObj.GetType().Name);
-                        editor?.Enabled = false;
+                        if (editor != null) editor.Enabled = false;
                     }
                 }
                 lstItems.SelectedIndex = -1;
